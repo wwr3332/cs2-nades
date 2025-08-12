@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- ЭЛЕМЕНТЫ DOM ---
+    const header = document.querySelector('header'); // ## Получаем доступ к заголовку
     const mapSelectionView = document.getElementById('map-selection');
     const mapView = document.getElementById('map-view');
     const mapContainer = document.getElementById('map-container');
@@ -76,13 +77,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         renderNadeList(currentMapData.nades);
 
-        document.body.style.overflow = 'hidden'; // Запрещаем прокрутку body
+        header.style.display = 'none'; // ## Скрываем заголовок
+        document.body.style.overflow = 'hidden';
         mapSelectionView.style.display = 'none';
         mapView.style.display = 'flex';
     }
 
     function showMapSelection() {
-        document.body.style.overflow = 'auto'; // Возвращаем прокрутку
+        header.style.display = 'block'; // ## Показываем заголовок снова
+        document.body.style.overflow = 'auto';
         mapView.style.display = 'none';
         mapSelectionView.style.display = 'block';
         removeHighlight();
@@ -113,5 +116,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ИНИЦИАЛИЗАЦИЯ ---
     showMapSelection();
-    console.log("App ready with new two-column layout.");
+    console.log("App ready with new two-column layout and header logic.");
 });
