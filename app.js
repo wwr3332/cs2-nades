@@ -1,20 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- ДАННЫЕ (без изменений) ---
+    // --- ДАННЫЕ ---
     const nadesData = {
         dust2: {
             name: "Dust II",
             image: "assets/images/dust2_map.png",
             nades: [
-                { id: "d2_smoke_ct_cross", name: "Смок на КТ спавн (для прохода на Б)", spot: { x: 51, y: 58 }, lineup: { video: "assets/lineups/d2_smoke_ct_cross.mp4", images: ["assets/lineups/d2_smoke_ct_cross_1.jpg"] } },
-                { id: "d2_smoke_xbox", name: "Смок на Иксбокс (с Т-спавна)", spot: { x: 50.5, y: 39 }, lineup: { video: "", images: [] } },
-                { id: "d2_molly_long_corner", name: "Молотов за угол (длина)", spot: { x: 81.5, y: 19 }, lineup: { video: "", images: [] } }
+                { 
+                    id: "d2_smoke_ctcross_from_tspawn", 
+                    from: "Т-спавн, у машины",
+                    to: "КТ-перетяжка на Б",
+                    type: "Дым",
+                    throwType: "Стандартный",
+                    spot: { x: 51, y: 58 }, 
+                    lineup: { video: "assets/lineups/d2_smoke_ct_cross.mp4", images: ["assets/lineups/d2_smoke_ct_cross_1.jpg"] }
+                },
+                { 
+                    id: "d2_smoke_xbox_from_tspawn", 
+                    from: "Т-спавн, за бочками",
+                    to: "Иксбокс (шорт)",
+                    type: "Дым",
+                    throwType: "Jump-throw",
+                    spot: { x: 50.5, y: 39 },
+                    lineup: { video: "", images: [] }
+                },
+                { 
+                    id: "d2_molly_longcorner_from_plat", 
+                    from: "Длина, за ящиком",
+                    to: "Угол у точки А",
+                    type: "Молотов",
+                    throwType: "Стандартный",
+                    spot: { x: 81.5, y: 19 },
+                    lineup: { video: "", images: [] }
+                }
             ]
         },
         mirage: { name: "Mirage", image: "assets/images/mirage_map.png", nades: [] }
     };
 
     // --- ЭЛЕМЕНТЫ DOM ---
-    const header = document.querySelector('header'); // ## Получаем доступ к заголовку
+    const header = document.querySelector('header');
     const mapSelectionView = document.getElementById('map-selection');
     const mapView = document.getElementById('map-view');
     const mapContainer = document.getElementById('map-container');
@@ -26,12 +50,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentMapData = null;
 
     // --- ФУНКЦИИ РЕНДЕРИНГА ---
+    function generateNadeTitle(nade) {
+        return `[${nade.type}] ${nade.to}`;
+    }
+
     function renderNadeList(nades) {
         infoPanelContent.innerHTML = '';
         nades.forEach(nade => {
             const item = document.createElement('div');
             item.className = 'nade-list-item';
-            item.textContent = nade.name;
+            item.textContent = generateNadeTitle(nade);
             item.addEventListener('mouseenter', () => createHighlight(nade.spot));
             item.addEventListener('mouseleave', removeHighlight);
             item.addEventListener('click', () => renderNadeDetails(nade));
@@ -51,7 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
         infoPanelContent.innerHTML = `
             <div class="nade-details-container">
                 <button class="back-to-list-btn">‹ Назад к списку гранат</button>
-                <h3>${nade.name}</h3>
+                <h3>${generateNadeTitle(nade)}</h3>
+                <div class="nade-meta-details">
+                    <p><strong>Откуда:</strong> ${nade.from}</p>
+                    <p><strong>Тип броска:</strong> ${nade.throwType}</p>
+                </div>
                 ${videoHTML}
                 <div class="nade-details-images">${imagesHTML}</div>
             </div>
@@ -77,14 +109,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         renderNadeList(currentMapData.nades);
 
-        header.style.display = 'none'; // ## Скрываем заголовок
+        header.style.display = 'none';
         document.body.style.overflow = 'hidden';
         mapSelectionView.style.display = 'none';
         mapView.style.display = 'flex';
     }
 
     function showMapSelection() {
-        header.style.display = 'block'; // ## Показываем заголовок снова
+        header.style.display = 'block';
         document.body.style.overflow = 'auto';
         mapView.style.display = 'none';
         mapSelectionView.style.display = 'block';
@@ -92,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentMapData = null;
     }
     
-    // --- ФУНКЦИИ ПОДСВЕТКИ (без изменений) ---
+    // --- ФУНКЦИИ ПОДСВЕТКИ ---
     function createHighlight(spot) {
         removeHighlight();
         const dot = document.createElement('div');
@@ -116,5 +148,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ИНИЦИАЛИЗАЦИЯ ---
     showMapSelection();
-    console.log("App ready with new two-column layout and header logic.");
+    console.log("App ready. Data model updated.");
 });

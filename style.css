@@ -127,6 +127,20 @@ header {
     margin-bottom: 15px;
     color: #66c0f4;
 }
+.nade-meta-details {
+    background-color: #1b2838;
+    padding: 10px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+.nade-meta-details p {
+    margin: 0;
+    padding: 2px 0;
+}
+.nade-meta-details strong {
+    color: #66c0f4;
+}
 .nade-details-container video {
     width: 100%;
     border-radius: 3px;
