@@ -38,66 +38,116 @@ header {
     margin-top: 30px;
 }
 
-/* Стили для страницы с картой */
-#back-to-selection-btn {
-    background-color: #66c0f4;
-    color: #1b2838;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    transition: background-color 0.2s;
+/* Стили для двух-колоночного макета */
+#map-view {
+    display: flex;
+    height: calc(100vh - 40px); /* Высота на весь экран минус отступы body */
+    gap: 20px;
 }
 
-#back-to-selection-btn:hover {
-    background-color: #c7d5e0;
-}
-
-#map-view h1 {
-    margin-bottom: 20px;
+#map-panel {
+    flex: 6; /* 60% ширины */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #map-container {
     position: relative;
-    max-width: 1024px;
-    margin: 0 auto;
+    width: 100%;
 }
 
 #map-image {
     width: 100%;
     display: block;
+    border-radius: 5px;
 }
 
-#nade-buttons {
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-}
-
-.nade-btn {
+#info-panel {
+    flex: 4; /* 40% ширины */
     background-color: #2a475e;
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.info-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+#info-panel-header h2 {
+    margin: 0;
+}
+
+#back-to-selection-btn {
+    background: none;
     border: 1px solid #66c0f4;
-    color: #c7d5e0;
-    padding: 10px 20px;
+    color: #66c0f4;
+    padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
 }
 
-.nade-btn:hover {
+#back-to-selection-btn:hover {
     background-color: #66c0f4;
     color: #1b2838;
 }
 
-/* Стили для подсветки на карте */
+#info-panel-content {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+/* Стили для списка гранат */
+.nade-list-item {
+    background-color: #1b2838;
+    color: #c7d5e0;
+    padding: 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.nade-list-item:hover {
+    border-left: 4px solid #66c0f4;
+    background-color: #203142;
+}
+
+/* Стили для деталей гранаты */
+.nade-details-container h3 {
+    margin-bottom: 15px;
+    color: #66c0f4;
+}
+.nade-details-container video {
+    width: 100%;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+.nade-details-images img {
+    width: 100%;
+    border-radius: 3px;
+}
+.back-to-list-btn {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #4b6a85;
+    border: none;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* Стили для подсветки на карте (без изменений) */
 .highlight-spot {
     position: absolute;
     width: 20px;
@@ -106,66 +156,8 @@ header {
     border: 2px solid white;
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    pointer-events: none; /* Чтобы точка не мешала кликам по карте */
+    pointer-events: none;
     box-shadow: 0 0 15px rgba(255, 69, 0, 1);
-}
-
-/* Стили для окна с деталями гранаты */
-#nade-details {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: none; /* По умолчанию скрыто */
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.nade-details-content {
-    background-color: #2a475e;
-    padding: 20px;
-    border-radius: 5px;
-    max-width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    text-align: left;
-    position: relative;
-}
-
-.nade-details-content h3 {
-    margin-bottom: 15px;
-    color: #66c0f4;
-}
-
-.nade-details-content video {
-    max-width: 100%;
-    margin-bottom: 15px;
-}
-
-.nade-details-images {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.nade-details-images img {
-    max-width: 100%;
-    height: auto;
-    border: 2px solid #1b2838;
-}
-
-#close-details-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 28px;
-    color: #c7d5e0;
-    background: none;
-    border: none;
-    cursor: pointer;
 }
 
 .map-card {
