@@ -38,6 +38,65 @@ header {
     margin-top: 30px;
 }
 
+/* Стили для страницы с картой */
+#back-to-selection-btn {
+    background-color: #66c0f4;
+    color: #1b2838;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    transition: background-color 0.2s;
+}
+
+#back-to-selection-btn:hover {
+    background-color: #c7d5e0;
+}
+
+#map-view h1 {
+    margin-bottom: 20px;
+}
+
+#map-container {
+    position: relative;
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+#map-image {
+    width: 100%;
+    display: block;
+}
+
+#nade-buttons {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.nade-btn {
+    background-color: #2a475e;
+    border: 1px solid #66c0f4;
+    color: #c7d5e0;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.nade-btn:hover {
+    background-color: #66c0f4;
+    color: #1b2838;
+}
+
 .map-card {
     background-color: #2a475e;
     padding: 40px 20px;
