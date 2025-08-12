@@ -1,0 +1,1 @@
+console.log("CS2 Nades Helper app loaded!");
