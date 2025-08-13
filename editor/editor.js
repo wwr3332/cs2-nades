@@ -89,13 +89,24 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.stroke();
 
             // Конечная точка ('куда') - рисуем иконку
+            // Конечная точка ('куда') - рисуем иконку
             if (points.length > 1) {
                 const endPoint = points[points.length - 1];
                 const icon = nadeIcons[currentNadeType];
-                const iconSize = 24;
-                // Проверяем, загружена ли иконка
-                if (icon && icon.complete) {
-                    ctx.drawImage(icon, endPoint.x - iconSize / 2, endPoint.y - iconSize / 2, iconSize, iconSize);
+                
+                // Проверяем, загружена ли иконка и имеет ли она размеры
+                if (icon && icon.complete && icon.width > 0) {
+                    const targetHeight = 40; // ## ИЗМЕНЕНО: Целевая высота иконки (стало крупнее)
+                    const ratio = icon.width / icon.height; // ## Расчет родного соотношения сторон
+                    const targetWidth = targetHeight * ratio; // ## Расчет ширины для сохранения пропорций
+
+                    ctx.drawImage(
+                        icon, 
+                        endPoint.x - targetWidth / 2, // Центрируем по горизонтали
+                        endPoint.y - targetHeight / 2, // Центрируем по вертикали
+                        targetWidth, 
+                        targetHeight
+                    );
                 }
             }
         }
