@@ -48,18 +48,17 @@ header {
 #map-panel {
     flex: 6; /* 60% ширины */
     display: flex;
-    flex-direction: column;      /* ИЗМЕНЕНО: Размещаем элементы (фильтры и карту) вертикально */
-    align-items: flex-start;     /* Выравниваем по левому краю */
-    justify-content: flex-end;   /* Прижимаем все к низу */
-    padding-bottom: 120px;
+    align-items: center;        /* Возвращаем центрирование для единственного элемента (карты) */
+    justify-content: center;
     box-sizing: border-box;
-    gap: 15px;                   /* Добавляем отступ между фильтрами и картой */
+    /* Убрали лишние свойства, так как теперь здесь только карта */
 }
 
 /* Стили для контейнера с фильтрами */
 #filter-container {
     display: flex;
     gap: 10px;
+    margin-left: 30px; /* Добавляем отступ от заголовка карты */
 }
 
 .filter-btn {
