@@ -1,0 +1,27 @@
+body {
+    font-family: sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 20px;
+}
+
+#editor-layout {
+    display: flex;
+    gap: 20px;
+}
+
+#canvas-container {
+    border: 1px solid #ccc;
+}
+
+#controls-panel {
+    flex-grow: 1;
+}
+
+textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: #e9e9e9;
+    border: 1px solid #ccc;
+    font-family: monospace;
+}
