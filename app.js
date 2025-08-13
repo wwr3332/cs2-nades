@@ -70,23 +70,34 @@ function renderNadeList() {
     });
 }
 
-function renderNadeDetails(nade) {
-    let videoHTML = nade.lineup && nade.lineup.video && nade.lineup.video !== ""
-        ? `<video src="${nade.lineup.video}" controls autoplay loop muted></video>` 
-        : '<p>Видео для этой гранаты еще не добавлено.</p>';
-    infoPanelContent.innerHTML = `
-        <div class="nade-details-container">
-            <button class="back-to-list-btn">‹ Назад к списку гранат</button>
-            <h3>${generateNadeTitle(nade)}</h3>
-            <div class="nade-meta-details">
-                <p><strong>Откуда:</strong> ${nade.from}</p>
-                <p><strong>Тип броска:</strong> ${nade.throwType}</p>
+    function renderNadeDetails(nade) {
+        // Проверяем наличие хоть каких-то медиа
+        const hasLineup = nade.lineup && (nade.lineup.video || (nade.lineup.images && nade.lineup.images.length > 0));
+
+        let mediaHTML;
+        if (hasLineup) {
+            const videoHTML = nade.lineup.video ? `<video src="${nade.lineup.video}" controls autoplay loop muted></video>` : '';
+            const imagesHTML = nade.lineup.images && nade.lineup.images.length > 0
+                ? nade.lineup.images.map(src => `<img src="${src}" alt="Скриншот лайнапа">`).join('')
+                : '';
+            mediaHTML = `${videoHTML}<div class="nade-details-images">${imagesHTML}</div>`;
+        } else {
+            mediaHTML = '<p>Медиафайлы для этой гранаты еще не добавлены.</p>';
+        }
+
+        infoPanelContent.innerHTML = `
+            <div class="nade-details-container">
+                <button class="back-to-list-btn">‹ Назад к списку гранат</button>
+                <h3>${generateNadeTitle(nade)}</h3>
+                <div class="nade-meta-details">
+                    <p><strong>Откуда:</strong> ${nade.from}</p>
+                    <p><strong>Тип броска:</strong> ${nade.throwType}</p>
+                </div>
+                ${mediaHTML}
             </div>
-            ${videoHTML}
-        </div>
-    `;
-    document.querySelector('.back-to-list-btn').addEventListener('click', renderNadeList);
-}
+        `;
+        document.querySelector('.back-to-list-btn').addEventListener('click', renderNadeList);
+    }
 
 // --- ФУНКЦИИ УПРАВЛЕНИЯ ВИДОМ ---
 async function showMapView(mapId) {
