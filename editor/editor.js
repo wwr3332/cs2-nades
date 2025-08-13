@@ -90,14 +90,23 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.stroke();
 
             // Конечная точка ('куда') - рисуем иконку
+            // Конечная точка ('куда') - рисуем иконку
             if (points.length > 1) {
                 const endPoint = points[points.length - 1];
                 const icon = nadeIcons[currentNadeType];
                 
                 if (icon && icon.complete && icon.width > 0) {
-                    const targetHeight = 40;
+                    // ## Устанавливаем размер в зависимости от типа гранаты
+                    const isFlash = currentNadeType === 'Флеш';
+                    const targetHeight = isFlash ? 48 : 40; // Флешка чуть больше остальных
+                    
                     const ratio = icon.width / icon.height;
                     const targetWidth = targetHeight * ratio;
+
+                    // ## Добавляем белый контур для флешки
+                    if (isFlash) {
+                        ctx.filter = 'drop-shadow(0 0 1.5px white)';
+                    }
 
                     ctx.drawImage(
                         icon, 
@@ -106,6 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         targetWidth, 
                         targetHeight
                     );
+
+                    // ## Сбрасываем фильтр, чтобы он не применялся к другим элементам
+                    if (isFlash) {
+                        ctx.filter = 'none';
+                    }
                 }
             }
         }
