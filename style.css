@@ -46,10 +46,11 @@ header {
 }
 
 #map-panel {
+#map-panel {
     flex: 6; /* 60% ширины */
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* ИЗМЕНЕНО: выравнивание по левому краю */
 }
 
 #map-container {
