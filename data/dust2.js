@@ -13,7 +13,10 @@ export default {
                 { "x": 31.84, "y": 88.38 },
                 { "x": 50.88, "y": 58.5 }
             ],
-            "lineup": { "video": "assets/lineups/dust2/video.mp4", "images": [] }
+            "lineup": { 
+                "video": "assets/lineups/dust2/d2_smoke_ct_cross.mp4", 
+                "images": ["assets/lineups/dust2/d2_smoke_ct_cross_1.jpg"] 
+            }
         },
         {
             "id": "d2_xbox_from_tspawn_example",
