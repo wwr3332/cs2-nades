@@ -50,7 +50,7 @@ header {
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
-    padding-bottom: 80px;      /* ИЗМЕНЕНО: Добавляем отступ снизу, чтобы карта была НАД кнопкой */
+    padding-bottom: 90px;     /* ИЗМЕНЕНО: Увеличили отступ для большего зазора */
     box-sizing: border-box;
 }
 
