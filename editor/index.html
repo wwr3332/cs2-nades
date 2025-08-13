@@ -13,10 +13,56 @@
             <canvas id="map-canvas" width="1024" height="1024"></canvas>
         </div>
         <div id="controls-panel">
+            <div class="control-group">
+                <button id="undo-button" class="control-btn">Отменить точку</button>
+                <button id="clear-button" class="control-btn clear-btn">Очистить все</button>
+            </div>
+            
             <h2>Настройки гранаты</h2>
+            <div class="control-group">
+                <label for="from-input">Откуда:</label>
+                <input type="text" id="from-input" placeholder="например, Т-спавн, у машины">
+            </div>
+            <div class="control-group">
+                <label for="to-input">Куда:</label>
+                <input type="text" id="to-input" placeholder="например, КТ-перетяжка на Б">
+            </div>
+            <div class="control-group">
+                <label for="type-select">Тип гранаты:</label>
+                <select id="type-select">
+                    <option value="Дым">Дым</option>
+                    <option value="Флеш">Флеш</option>
+                    <option value="Молотов">Молотов</option>
+                    <option value="HE">HE</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="throw-type-select">Тип броска:</label>
+                <select id="throw-type-select">
+                    <option value="Стандартный">Стандартный</option>
+                    <option value="Jump-throw">Jump-throw</option>
+                </select>
+            </div>
+            
+            <h2>Настройки отображения</h2>
+             <div class="control-group">
+                <label for="side-select">Сторона (цвет):</label>
+                <select id="side-select">
+                    <option value="T">T (Оранжевый)</option>
+                    <option value="CT">CT (Синий)</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="line-type-select">Тип линии:</label>
+                <select id="line-type-select">
+                    <option value="Прямая">Прямая</option>
+                    <option value="Кривая">Кривая (через 3 точки)</option>
+                </select>
+            </div>
+
             <h2>Сгенерированный код</h2>
             <textarea id="output-code" readonly rows="10"></textarea>
-            <button id="copy-button">Копировать</button>
+            <button id="copy-button" class="control-btn">Копировать</button>
         </div>
     </div>
     <script src="editor.js"></script>
