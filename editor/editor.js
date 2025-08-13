@@ -4,12 +4,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Получение элементов DOM ---
     // --- Получение элементов DOM ---
     // --- Получение элементов DOM ---
+    // --- Получение элементов DOM ---
     const canvas = document.getElementById('map-canvas');
     const ctx = canvas.getContext('2d');
+    // Поля ввода
+    const fromInput = document.getElementById('from-input');
+    const toInput = document.getElementById('to-input');
+    const typeSelect = document.getElementById('type-select');
+    const throwTypeSelect = document.getElementById('throw-type-select');
     const sideSelect = document.getElementById('side-select');
-    const typeSelect = document.getElementById('type-select'); // ## Добавили селектор типа гранаты
+    // Кнопки
     const undoButton = document.getElementById('undo-button');
     const clearButton = document.getElementById('clear-button');
+    const copyButton = document.getElementById('copy-button');
+    // Вывод
+    const outputCode = document.getElementById('output-code');
 
     // --- Изображение карты ---
     const mapImage = new Image();
@@ -18,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Состояние (State) ---
     let points = [];
     let currentSide = sideSelect.value;
-    let currentNadeType = typeSelect.value; // ## Добавили состояние для типа гранаты
+    let currentNadeType = typeSelect.value;
 
     // ## Предварительная загрузка иконок
     const nadeIcons = {};
@@ -158,6 +167,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     clearButton.addEventListener('click', () => {
         points = [];
+        fromInput.value = '';
+        toInput.value = '';
         redrawCanvas();
+    });
+
+    // ## Функция для генерации и копирования данных
+    copyButton.addEventListener('click', () => {
+        if (points.length < 2) {
+            alert('Нужно как минимум 2 точки (старт и конец).');
+            return;
+        }
+
+        // ## 1. Конвертируем координаты в проценты
+        const trajectory = points.map(p => ({
+            x: parseFloat((p.x / canvas.width * 100).toFixed(2)),
+            y: parseFloat((p.y / canvas.height * 100).toFixed(2))
+        }));
+
+        // ## 2. Собираем все данные в один объект
+        const nadeObject = {
+            id: `d2_${toInput.value.toLowerCase().replace(/ /g, '_')}_from_${fromInput.value.toLowerCase().replace(/ /g, '_')}_${Date.now()}`,
+            from: fromInput.value,
+            to: toInput.value,
+            type: typeSelect.value,
+            throwType: throwTypeSelect.value,
+            side: sideSelect.value,
+            trajectory: trajectory
+        };
+
+        // ## 3. Превращаем объект в красивую строку
+        const jsonString = JSON.stringify(nadeObject, null, 4);
+
+        // ## 4. Выводим в textarea и копируем в буфер обмена
+        outputCode.value = jsonString;
+        navigator.clipboard.writeText(jsonString).then(() => {
+            copyButton.textContent = 'Скопировано!';
+            setTimeout(() => {
+                copyButton.textContent = 'Копировать';
+            }, 1500);
+        }).catch(err => {
+            console.error('Ошибка копирования: ', err);
+            alert('Не удалось скопировать текст.');
+        });
     });
 });
