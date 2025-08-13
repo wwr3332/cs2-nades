@@ -48,10 +48,10 @@ header {
 #map-panel {
     flex: 6; /* 60% ширины */
     display: flex;
-    align-items: flex-end;       /* Выравнивание по нижнему краю - ОСТАВЛЯЕМ */
-    justify-content: flex-start; /* ИЗМЕНЕНО: Выравнивание по левому краю */
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding-bottom: 80px;      /* ИЗМЕНЕНО: Добавляем отступ снизу, чтобы карта была НАД кнопкой */
     box-sizing: border-box;
-    /* Убрали padding-bottom, чтобы карта была у нижнего края */
 }
 
 #map-container {
@@ -210,10 +210,10 @@ header {
 }
 
 .map-view-active #map-view {
-    height: 100vh; /* Растягиваем на всю высоту */
-    padding: 0 20px; /* Добавляем боковые отступы, чтобы контент не прилипал к краям */
+    height: 100vh;
+    padding-right: 20px; /* ИЗМЕНЕНО: Убрали отступ слева, оставили только справа */
     gap: 20px;
-    box-sizing: border-box; /* Учитываем padding в расчете высоты */
+    box-sizing: border-box;
 }
 
 .map-view-active body {
