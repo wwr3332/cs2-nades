@@ -1,34 +1,48 @@
-body {
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Запрещаем скролл для всей страницы */
     font-family: sans-serif;
     background-color: #f0f0f0;
-    color: #333;
-    padding: 20px;
 }
 
 #editor-layout {
-#editor-layout {
     display: flex;
-    gap: 20px;
-    flex-wrap: wrap; /* Разрешаем перенос блоков на маленьких экранах */
+    height: 100vh; /* Занимает 100% высоты окна */
+    padding: 15px;
+    gap: 15px;
+    box-sizing: border-box;
 }
 
 #canvas-container {
     border: 1px solid #ccc;
-    flex: 2; /* Панель с картой занимает 2/3 доступного места */
-    min-width: 400px; /* Минимальная ширина, чтобы не сжималось слишком сильно */
+    flex: 2; /* Карта занимает 2/3 ширины */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #map-canvas {
-    max-width: 1024px; /* Максимальный размер */
-    width: 100%;     /* Растягиваем на всю ширину контейнера */
-    height: auto;      /* Высота подстраивается для сохранения пропорций */
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
     display: block;
 }
 
 #controls-panel {
-    flex-grow: 1;
-    flex: 1; /* Панель управления занимает 1/3 */
-    min-width: 300px;
+    flex: 1; /* Панель управления занимает 1/3 ширины */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Включаем внутренний скролл, если контент не помещается */
+}
+
+#controls-panel h1 {
+    margin-top: 0;
 }
 
 #controls-panel {

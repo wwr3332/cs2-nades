@@ -83,7 +83,6 @@ header {
 
 #map-container {
     position: relative;
-    /* Убрали width: 100%, чтобы контейнер сжался до размера картинки */
 }
 
 #map-image {
