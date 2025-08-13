@@ -48,10 +48,10 @@ header {
 #map-panel {
     flex: 6; /* 60% ширины */
     display: flex;
-    align-items: flex-end;      /* ИЗМЕНЕНО: Выравниваем по нижнему краю */
-    justify-content: center;
-    padding-bottom: 75px;       /* ИЗМЕНЕНО: Добавляем отступ снизу, чтобы было место над кнопкой */
-    box-sizing: border-box;     /* Важно, чтобы padding не увеличивал высоту панели */
+    align-items: flex-end;       /* Выравнивание по нижнему краю - ОСТАВЛЯЕМ */
+    justify-content: flex-start; /* ИЗМЕНЕНО: Выравнивание по левому краю */
+    box-sizing: border-box;
+    /* Убрали padding-bottom, чтобы карта была у нижнего края */
 }
 
 #map-container {
@@ -63,7 +63,7 @@ header {
     display: block;
     border-radius: 5px;
     /* Новые правила для ограничения размера с сохранением пропорций */
-    max-height: 75vh; /* ИЗМЕНЕНО: Карта стала меньше */
+    max-height: 65vh; /* ИЗМЕНЕНО: Карта стала ЕЩЕ меньше */
     max-width: 100%;
     width: auto;
     height: auto;
