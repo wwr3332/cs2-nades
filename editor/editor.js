@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ## Функция для полной перерисовки холста
+    // ## Функция для полной перерисовки холста
     function redrawCanvas() {
         // Очищаем все
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -31,9 +32,23 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
         drawGrid(32);
 
-        // Рисуем все точки из массива
+        // ## 1. Рисуем ЛИНИИ траектории
+        if (points.length > 1) {
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                ctx.lineTo(points[i].x, points[i].y);
+            }
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 10]); // Устанавливаем пунктир: 5 пикселей линия, 10 пикселей отступ
+            ctx.stroke();
+        }
+
+        // ## 2. Рисуем ТОЧКИ (поверх линий)
+        ctx.setLineDash([]); // Сбрасываем пунктир, чтобы обводка точек была сплошной
         ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
-        ctx.strokeStyle = '#fff';
+        ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 2;
         points.forEach(point => {
             ctx.beginPath();
