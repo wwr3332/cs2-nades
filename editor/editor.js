@@ -70,8 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.lineTo(points[i].x, points[i].y);
             }
             ctx.strokeStyle = lineColor;
-            ctx.lineWidth = 2;
-            ctx.setLineDash([5, 10]);
+            ctx.lineWidth = 3; // ИЗМЕНЕНО: Линия стала толще
+            ctx.setLineDash([8, 8]); // ИЗМЕНЕНО: Штрихи стали длиннее и ближе
             ctx.stroke();
         }
 
@@ -83,27 +83,26 @@ document.addEventListener('DOMContentLoaded', () => {
             // Начальная точка ('откуда')
             const startPoint = points[0];
             ctx.fillStyle = lineColor;
+            ctx.lineWidth = 2; // Обводка для точек остается прежней
             ctx.beginPath();
-            ctx.arc(startPoint.x, startPoint.y, 8, 0, 2 * Math.PI);
+            ctx.arc(startPoint.x, startPoint.y, 10, 0, 2 * Math.PI); // ИЗМЕНЕНО: Кружок стал больше
             ctx.fill();
             ctx.stroke();
 
-            // Конечная точка ('куда') - рисуем иконку
             // Конечная точка ('куда') - рисуем иконку
             if (points.length > 1) {
                 const endPoint = points[points.length - 1];
                 const icon = nadeIcons[currentNadeType];
                 
-                // Проверяем, загружена ли иконка и имеет ли она размеры
                 if (icon && icon.complete && icon.width > 0) {
-                    const targetHeight = 40; // ## ИЗМЕНЕНО: Целевая высота иконки (стало крупнее)
-                    const ratio = icon.width / icon.height; // ## Расчет родного соотношения сторон
-                    const targetWidth = targetHeight * ratio; // ## Расчет ширины для сохранения пропорций
+                    const targetHeight = 40;
+                    const ratio = icon.width / icon.height;
+                    const targetWidth = targetHeight * ratio;
 
                     ctx.drawImage(
                         icon, 
-                        endPoint.x - targetWidth / 2, // Центрируем по горизонтали
-                        endPoint.y - targetHeight / 2, // Центрируем по вертикали
+                        endPoint.x - targetWidth / 2,
+                        endPoint.y - targetHeight / 2,
                         targetWidth, 
                         targetHeight
                     );
