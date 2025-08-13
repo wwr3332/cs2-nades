@@ -196,3 +196,20 @@ header {
     transform: translateY(-5px);
     border-color: #66c0f4;
 }
+
+/* Новые стили для полноэкранного режима карты */
+.map-view-active #app {
+    max-width: none; /* Убираем ограничение ширины */
+    margin: 0;       /* Убираем центрирование */
+}
+
+.map-view-active #map-view {
+    height: 100vh; /* Растягиваем на всю высоту */
+    padding: 0 20px; /* Добавляем боковые отступы, чтобы контент не прилипал к краям */
+    gap: 20px;
+    box-sizing: border-box; /* Учитываем padding в расчете высоты */
+}
+
+.map-view-active body {
+    padding: 0; /* Убираем глобальные отступы у body в этом режиме */
+}

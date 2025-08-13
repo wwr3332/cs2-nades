@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         renderNadeList(currentMapData.nades);
 
+        document.body.classList.add('map-view-active'); // ## ДОБАВЛЕНО
         header.style.display = 'none';
         document.body.style.overflow = 'hidden';
         mapSelectionView.style.display = 'none';
@@ -116,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showMapSelection() {
+        document.body.classList.remove('map-view-active'); // ## ДОБАВЛЕНО
         header.style.display = 'block';
         document.body.style.overflow = 'auto';
         mapView.style.display = 'none';
