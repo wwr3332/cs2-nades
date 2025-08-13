@@ -48,10 +48,9 @@ header {
 #map-panel {
     flex: 6; /* 60% ширины */
     display: flex;
-    align-items: center;        /* Возвращаем центрирование для единственного элемента (карты) */
-    justify-content: center;
+    align-items: flex-end;       /* ИЗМЕНЕНО: Снова выравниваем по низу */
+    justify-content: flex-start; /* ИЗМЕНЕНО: И по левому краю */
     box-sizing: border-box;
-    /* Убрали лишние свойства, так как теперь здесь только карта */
 }
 
 /* Стили для контейнера с фильтрами */
