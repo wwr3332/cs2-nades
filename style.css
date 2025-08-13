@@ -49,18 +49,22 @@ header {
     flex: 6; /* 60% ширины */
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* ИЗМЕНЕНО: выравнивание по левому краю */
+    justify-content: center; /* ИЗМЕНЕНО: Снова центрируем, чтобы были отступы */
 }
 
 #map-container {
     position: relative;
-    width: 100%;
+    /* Убрали width: 100%, чтобы контейнер сжался до размера картинки */
 }
 
 #map-image {
-    width: 100%;
     display: block;
     border-radius: 5px;
+    /* Новые правила для ограничения размера с сохранением пропорций */
+    max-height: 90vh; /* Макс. высота - 90% высоты экрана */
+    max-width: 100%;  /* Макс. ширина - 100% панели, чтобы не вылезать на мал. экранах */
+    width: auto;
+    height: auto;
 }
 
 #info-panel {
