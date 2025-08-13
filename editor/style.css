@@ -6,12 +6,29 @@ body {
 }
 
 #editor-layout {
+#editor-layout {
     display: flex;
     gap: 20px;
+    flex-wrap: wrap; /* Разрешаем перенос блоков на маленьких экранах */
 }
 
 #canvas-container {
     border: 1px solid #ccc;
+    flex: 2; /* Панель с картой занимает 2/3 доступного места */
+    min-width: 400px; /* Минимальная ширина, чтобы не сжималось слишком сильно */
+}
+
+#map-canvas {
+    max-width: 1024px; /* Максимальный размер */
+    width: 100%;     /* Растягиваем на всю ширину контейнера */
+    height: auto;      /* Высота подстраивается для сохранения пропорций */
+    display: block;
+}
+
+#controls-panel {
+    flex-grow: 1;
+    flex: 1; /* Панель управления занимает 1/3 */
+    min-width: 300px;
 }
 
 #controls-panel {

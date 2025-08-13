@@ -143,8 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     canvas.addEventListener('click', (event) => {
         const rect = canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
+
+        // ## Вычисляем масштаб, с которым холст отображается на странице
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        // ## Масштабируем координаты клика до реальных координат холста (1024x1024)
+        const x = (event.clientX - rect.left) * scaleX;
+        const y = (event.clientY - rect.top) * scaleY;
+
         points.push({ x, y });
         console.log(`Добавлена точка: x=${x.toFixed(0)}, y=${y.toFixed(0)}`);
         redrawCanvas();
