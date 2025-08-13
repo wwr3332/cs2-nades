@@ -1,36 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- ДАННЫЕ ---
+    // --- НОВАЯ СТРУКТУРА ДАННЫХ ---
     const nadesData = {
         dust2: {
             name: "Dust II",
             image: "assets/images/dust2_map.png",
             nades: [
-                { 
-                    id: "d2_smoke_ctcross_from_tspawn", 
-                    from: "Т-спавн, у машины",
-                    to: "КТ-перетяжка на Б",
-                    type: "Дым",
-                    throwType: "Стандартный",
-                    spot: { x: 51, y: 58 }, 
-                    lineup: { video: "assets/lineups/d2_smoke_ct_cross.mp4", images: ["assets/lineups/d2_smoke_ct_cross_1.jpg"] }
+                // Пример гранаты в новом формате. Вы можете вставить сюда данные из вашего редактора.
+                {
+                    "id": "d2_ct_cross_from_tspawn_example",
+                    "from": "Т-спавн, у машины",
+                    "to": "КТ-перетяжка на Б",
+                    "type": "Дым",
+                    "throwType": "Стандартный",
+                    "side": "T",
+                    "trajectory": [
+                        { "x": 31.84, "y": 88.38 },
+                        { "x": 50.88, "y": 58.5 }
+                    ],
+                    "lineup": { "video": "", "images": [] } // Оставьте для будущих видео/скриншотов
                 },
-                { 
-                    id: "d2_smoke_xbox_from_tspawn", 
-                    from: "Т-спавн, за бочками",
-                    to: "Иксбокс (шорт)",
-                    type: "Дым",
-                    throwType: "Jump-throw",
-                    spot: { x: 50.5, y: 39 },
-                    lineup: { video: "", images: [] }
-                },
-                { 
-                    id: "d2_molly_longcorner_from_plat", 
-                    from: "Длина, за ящиком",
-                    to: "Угол у точки А",
-                    type: "Молотов",
-                    throwType: "Стандартный",
-                    spot: { x: 81.5, y: 19 },
-                    lineup: { video: "", images: [] }
+                 {
+                    "id": "d2_xbox_from_tspawn_example",
+                    "from": "Т-спавн, за бочками",
+                    "to": "Иксбокс (шорт)",
+                    "type": "Дым",
+                    "throwType": "Jump-throw",
+                    "side": "CT",
+                    "trajectory": [
+                        { "x": 37.01, "y": 91.02 },
+                        { "x": 50.49, "y": 38.96 }
+                    ],
+                    "lineup": { "video": "", "images": [] }
                 }
             ]
         },
@@ -41,48 +41,78 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('header');
     const mapSelectionView = document.getElementById('map-selection');
     const mapView = document.getElementById('map-view');
-    const mapContainer = document.getElementById('map-container');
+    const mapOverlay = document.getElementById('map-overlay');
     const backToSelectionBtn = document.getElementById('back-to-selection-btn');
     const mapTitle = document.getElementById('map-title');
     const mapImage = document.getElementById('map-image');
     const infoPanelContent = document.getElementById('info-panel-content');
 
+    // --- Состояние ---
     let currentMapData = null;
-    let activeFilters = new Set(); // ## Храним активные фильтры здесь
+    let activeFilters = new Set();
+    const colors = { T: '#ffae00', CT: '#00bfff' };
 
     // --- ФУНКЦИИ РЕНДЕРИНГА ---
     function generateNadeTitle(nade) {
         return `[${nade.type}] ${nade.to}`;
     }
 
+    function drawTrajectory(nade) {
+        mapOverlay.innerHTML = ''; // Очищаем предыдущую траекторию
+        if (!nade || !nade.trajectory || nade.trajectory.length < 2) return;
+
+        const color = colors[nade.side] || '#ffffff';
+        const startPoint = nade.trajectory[0];
+        const endPoint = nade.trajectory[nade.trajectory.length - 1];
+
+        // 1. Рисуем линию
+        const pathData = 'M ' + nade.trajectory.map(p => `${p.x}% ${p.y}%`).join(' L ');
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', pathData);
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('stroke-dasharray', '5 5');
+        path.setAttribute('fill', 'none');
+        mapOverlay.appendChild(path);
+
+        // 2. Рисуем точку "откуда"
+        const startCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        startCircle.setAttribute('cx', `${startPoint.x}%`);
+        startCircle.setAttribute('cy', `${startPoint.y}%`);
+        startCircle.setAttribute('r', '8');
+        startCircle.setAttribute('fill', color);
+        startCircle.setAttribute('stroke', 'white');
+        startCircle.setAttribute('stroke-width', '2');
+        mapOverlay.appendChild(startCircle);
+
+        // 3. Рисуем иконку "куда"
+        const icon = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        icon.setAttribute('href', `assets/icons/${nade.type}.svg`);
+        const iconSize = nade.type === 'Флеш' ? 32 : 28;
+        icon.setAttribute('x', `calc(${endPoint.x}% - ${iconSize/2}px)`);
+        icon.setAttribute('y', `calc(${endPoint.y}% - ${iconSize/2}px)`);
+        icon.setAttribute('width', `${iconSize}px`);
+        icon.setAttribute('height', `${iconSize}px`);
+        mapOverlay.appendChild(icon);
+    }
+
     function renderNadeList() {
         const nades = currentMapData.nades;
-        // ## Фильтруем гранаты. Если фильтров нет, показываем все.
-        const filteredNades = activeFilters.size === 0
-            ? nades
-            : nades.filter(nade => activeFilters.has(nade.type));
-
+        const filteredNades = activeFilters.size === 0 ? nades : nades.filter(nade => activeFilters.has(nade.type));
         infoPanelContent.innerHTML = '';
         filteredNades.forEach(nade => {
             const item = document.createElement('div');
             item.className = 'nade-list-item';
             item.textContent = generateNadeTitle(nade);
-            item.addEventListener('mouseenter', () => createHighlight(nade.spot));
-            item.addEventListener('mouseleave', removeHighlight);
+            item.addEventListener('mouseenter', () => drawTrajectory(nade));
+            item.addEventListener('mouseleave', () => drawTrajectory(null)); // Очищаем при уводе мыши
             item.addEventListener('click', () => renderNadeDetails(nade));
             infoPanelContent.appendChild(item);
         });
     }
 
     function renderNadeDetails(nade) {
-        if (!nade.lineup || (!nade.lineup.video && nade.lineup.images.length === 0)) {
-            alert("Для этой гранаты пока нет материалов.");
-            return;
-        }
-
-        let imagesHTML = nade.lineup.images.map(src => `<img src="${src}" alt="Скриншот лайнапа">`).join('');
-        let videoHTML = nade.lineup.video ? `<video src="${nade.lineup.video}" controls autoplay loop muted></video>` : '';
-
+        let videoHTML = nade.lineup && nade.lineup.video ? `<video src="${nade.lineup.video}" controls autoplay loop muted></video>` : '<p>Видео для этой гранаты еще не добавлено.</p>';
         infoPanelContent.innerHTML = `
             <div class="nade-details-container">
                 <button class="back-to-list-btn">‹ Назад к списку гранат</button>
@@ -92,21 +122,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p><strong>Тип броска:</strong> ${nade.throwType}</p>
                 </div>
                 ${videoHTML}
-                <div class="nade-details-images">${imagesHTML}</div>
             </div>
         `;
-
-        document.querySelector('.back-to-list-btn').addEventListener('click', () => {
-             renderNadeList(currentMapData.nades);
-             removeHighlight();
-        });
+        document.querySelector('.back-to-list-btn').addEventListener('click', renderNadeList);
     }
 
     // --- ФУНКЦИИ УПРАВЛЕНИЯ ВИДОМ ---
     function showMapView(mapId) {
         currentMapData = nadesData[mapId];
-        if (!currentMapData || currentMapData.nades.length === 0) {
-            alert(`Для карты "${nadesData[mapId]?.name || mapId}" пока не добавлено ни одной гранаты.`);
+        if (!currentMapData || !currentMapData.nades) {
+            alert(`Для карты "${mapId}" данные не найдены.`);
             return;
         }
 
@@ -114,19 +139,15 @@ document.addEventListener('DOMContentLoaded', () => {
         mapImage.src = currentMapData.image;
         mapImage.alt = `Карта ${currentMapData.name}`;
 
-        // ## Создаем и настраиваем кнопки фильтров
         const filterContainer = document.getElementById('filter-container');
         filterContainer.innerHTML = '';
-        const nadeTypes = ["Дым", "Флеш", "Молотов", "HE"]; // Возможные типы гранат
-
+        const nadeTypes = ["Дым", "Флеш", "Молотов", "HE"];
         nadeTypes.forEach(type => {
             const btn = document.createElement('button');
             btn.className = 'filter-btn';
             btn.textContent = type;
             btn.dataset.type = type;
-
             btn.addEventListener('click', () => {
-                // Переключаем фильтр
                 if (activeFilters.has(type)) {
                     activeFilters.delete(type);
                     btn.classList.remove('active');
@@ -134,13 +155,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     activeFilters.add(type);
                     btn.classList.add('active');
                 }
-                // Перерисовываем список гранат с учетом фильтров
                 renderNadeList();
             });
             filterContainer.appendChild(btn);
         });
         
-        renderNadeList(); // Первый рендер списка
+        renderNadeList();
 
         document.body.classList.add('map-view-active');
         header.style.display = 'none';
@@ -155,24 +175,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'auto';
         mapView.style.display = 'none';
         mapSelectionView.style.display = 'block';
-        removeHighlight();
+        drawTrajectory(null); // Очищаем SVG
         currentMapData = null;
-        activeFilters.clear(); // ## Сбрасываем фильтры при выходе на главный экран
-    }
-    
-    // --- ФУНКЦИИ ПОДСВЕТКИ ---
-    function createHighlight(spot) {
-        removeHighlight();
-        const dot = document.createElement('div');
-        dot.className = 'highlight-spot';
-        dot.style.left = `${spot.x}%`;
-        dot.style.top = `${spot.y}%`;
-        mapContainer.appendChild(dot);
-    }
-
-    function removeHighlight() {
-        const existingDot = document.querySelector('.highlight-spot');
-        if (existingDot) existingDot.remove();
+        activeFilters.clear();
     }
 
     // --- ОБРАБОТЧИКИ СОБЫТИЙ ---
@@ -184,5 +189,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ИНИЦИАЛИЗАЦИЯ ---
     showMapSelection();
-    console.log("App ready. Data model updated.");
+    console.log("App ready with new SVG trajectory rendering.");
 });
