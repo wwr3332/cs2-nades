@@ -48,9 +48,10 @@ header {
 #map-panel {
     flex: 6; /* 60% ширины */
     display: flex;
-    align-items: flex-end;       /* ИЗМЕНЕНО: Снова выравниваем по низу */
-    justify-content: flex-start; /* ИЗМЕНЕНО: И по левому краю */
+    align-items: flex-end;
+    justify-content: flex-start;
     box-sizing: border-box;
+    padding-bottom: 90px; /* ИЗМЕНЕНО: Возвращаем отступ, чтобы карта была НАД кнопками */
 }
 
 /* Стили для контейнера с фильтрами */
