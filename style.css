@@ -76,7 +76,7 @@ header {
 .info-panel-header {
     display: flex;
     align-items: center;
-    gap: 15px;
+    justify-content: center; /* Центрируем заголовок, т.к. кнопка уехала */
     margin-bottom: 20px;
     flex-shrink: 0;
 }
@@ -86,18 +86,26 @@ header {
 }
 
 #back-to-selection-btn {
-    background: none;
+    position: fixed; /* Позиционируем относительно окна браузера */
+    left: 20px;
+    bottom: 20px;
+    z-index: 1000; /* Размещаем поверх всех элементов */
+    
+    background-color: #2a475e;
+    color: #c7d5e0;
     border: 1px solid #66c0f4;
-    color: #66c0f4;
-    padding: 8px 12px;
+    padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-    transition: all 0.2s;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
 }
 
 #back-to-selection-btn:hover {
     background-color: #66c0f4;
     color: #1b2838;
+    transform: scale(1.05);
 }
 
 #info-panel-content {
