@@ -3,9 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Получение элементов DOM ---
     // --- Получение элементов DOM ---
+    // --- Получение элементов DOM ---
     const canvas = document.getElementById('map-canvas');
     const ctx = canvas.getContext('2d');
     const sideSelect = document.getElementById('side-select');
+    const typeSelect = document.getElementById('type-select'); // ## Добавили селектор типа гранаты
     const undoButton = document.getElementById('undo-button');
     const clearButton = document.getElementById('clear-button');
 
@@ -14,8 +16,27 @@ document.addEventListener('DOMContentLoaded', () => {
     mapImage.src = '../assets/images/dust2_map.png';
 
     // --- Состояние (State) ---
-    let points = []; // Массив для хранения координат точек
-    let currentSide = sideSelect.value; // T или CT
+    let points = [];
+    let currentSide = sideSelect.value;
+    let currentNadeType = typeSelect.value; // ## Добавили состояние для типа гранаты
+
+    // ## Предварительная загрузка иконок
+    const nadeIcons = {};
+    const iconTypes = ["Дым", "Флеш", "Молотов", "HE"];
+    let iconsLoaded = 0;
+    
+    iconTypes.forEach(type => {
+        const img = new Image();
+        img.src = `icons/${type}.png`;
+        img.onload = () => {
+            iconsLoaded++;
+            // Если все иконки загружены, можно один раз перерисовать холст
+            if (iconsLoaded === iconTypes.length) {
+                redrawCanvas();
+            }
+        };
+        nadeIcons[type] = img;
+    });
 
     // --- Цвета ---
     const colors = {
@@ -41,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const lineColor = colors[currentSide];
 
-        // 1. Рисуем ЛИНИИ траектории (всегда прямые)
+        // 1. Рисуем ЛИНИИ траектории
         if (points.length > 1) {
             ctx.beginPath();
             ctx.moveTo(points[0].x, points[0].y);
@@ -54,12 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.stroke();
         }
 
-        // 2. Рисуем ТОЛЬКО первую и последнюю точки
+        // 2. Рисуем точки и иконки
         if (points.length > 0) {
             ctx.setLineDash([]);
             ctx.strokeStyle = colors.pointStroke;
             
-            // Начальная точка ('откуда') - большая
+            // Начальная точка ('откуда')
             const startPoint = points[0];
             ctx.fillStyle = lineColor;
             ctx.beginPath();
@@ -67,14 +88,15 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.fill();
             ctx.stroke();
 
-            // Конечная точка ('куда') - если она не первая
+            // Конечная точка ('куда') - рисуем иконку
             if (points.length > 1) {
                 const endPoint = points[points.length - 1];
-                ctx.fillStyle = 'rgba(0, 255, 0, 0.8)'; // Зеленый цвет для конечной точки
-                ctx.beginPath();
-                ctx.arc(endPoint.x, endPoint.y, 6, 0, 2 * Math.PI);
-                ctx.fill();
-                ctx.stroke();
+                const icon = nadeIcons[currentNadeType];
+                const iconSize = 24;
+                // Проверяем, загружена ли иконка
+                if (icon && icon.complete) {
+                    ctx.drawImage(icon, endPoint.x - iconSize / 2, endPoint.y - iconSize / 2, iconSize, iconSize);
+                }
             }
         }
     }
@@ -97,6 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sideSelect.addEventListener('change', (e) => {
         currentSide = e.target.value;
+        redrawCanvas();
+    });
+
+    typeSelect.addEventListener('change', (e) => {
+        currentNadeType = e.target.value;
         redrawCanvas();
     });
 
