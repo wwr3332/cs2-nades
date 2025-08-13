@@ -61,12 +61,17 @@ document.addEventListener('DOMContentLoaded', () => {
         mapOverlay.innerHTML = ''; // Очищаем предыдущую траекторию
         if (!nade || !nade.trajectory || nade.trajectory.length < 2) return;
 
+        const { width, height } = mapOverlay.getBoundingClientRect(); // Получаем реальные размеры SVG в пикселях
         const color = colors[nade.side] || '#ffffff';
         const startPoint = nade.trajectory[0];
         const endPoint = nade.trajectory[nade.trajectory.length - 1];
 
         // 1. Рисуем линию
-        const pathData = 'M ' + nade.trajectory.map(p => `${p.x}% ${p.y}%`).join(' L ');
+        // ИЗМЕНЕНО: Конвертируем % в пиксели специально для атрибута 'd', который не поддерживает %
+        const pathData = 'M ' + nade.trajectory.map(p => 
+            `${(p.x / 100) * width} ${(p.y / 100) * height}`
+        ).join(' L ');
+
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('d', pathData);
         path.setAttribute('stroke', color);
@@ -75,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         path.setAttribute('fill', 'none');
         mapOverlay.appendChild(path);
 
-        // 2. Рисуем точку "откуда"
+        // 2. Рисуем точку "откуда" (здесь % работают)
         const startCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         startCircle.setAttribute('cx', `${startPoint.x}%`);
         startCircle.setAttribute('cy', `${startPoint.y}%`);
@@ -85,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startCircle.setAttribute('stroke-width', '2');
         mapOverlay.appendChild(startCircle);
 
-        // 3. Рисуем иконку "куда"
+        // 3. Рисуем иконку "куда" (здесь % работают)
         const icon = document.createElementNS('http://www.w3.org/2000/svg', 'image');
         icon.setAttribute('href', `assets/icons/${nade.type}.svg`);
         const iconSize = nade.type === 'Флеш' ? 32 : 28;
