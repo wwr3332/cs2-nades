@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     iconTypes.forEach(type => {
         const img = new Image();
-        img.src = `icons/${type}.png`;
+        img.src = `icons/${type}.svg`; // ИЗМЕНЕНО: теперь .svg
         img.onload = () => {
             iconsLoaded++;
             // Если все иконки загружены, можно один раз перерисовать холст
