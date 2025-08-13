@@ -57,8 +57,20 @@ textarea {
     font-family: monospace;
 }
 
-.control-group {
+.form-row {
+    display: flex;
+    gap: 15px;
     margin-bottom: 15px;
+}
+
+.form-row.grid-2x2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.control-group {
+    /* margin-bottom теперь не нужен, т.к. есть gap у родителя */
+    flex: 1; /* Позволяет элементам в form-row занимать равное место */
 }
 
 .control-group label {

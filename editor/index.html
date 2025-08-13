@@ -19,49 +19,53 @@
             </div>
             
             <h2>Настройки гранаты</h2>
-            <div class="control-group">
-                <label for="from-input">Откуда:</label>
-                <input type="text" id="from-input" placeholder="например, Т-спавн, у машины">
+            <div class="form-row">
+                <div class="control-group">
+                    <label for="from-input">Откуда:</label>
+                    <input type="text" id="from-input" placeholder="Т-спавн, у машины">
+                </div>
+                <div class="control-group">
+                    <label for="to-input">Куда:</label>
+                    <input type="text" id="to-input" placeholder="КТ-перетяжка на Б">
+                </div>
             </div>
-            <div class="control-group">
-                <label for="to-input">Куда:</label>
-                <input type="text" id="to-input" placeholder="например, КТ-перетяжка на Б">
-            </div>
-            <div class="control-group">
-                <label for="type-select">Тип гранаты:</label>
-                <select id="type-select">
-                    <option value="Дым">Дым</option>
-                    <option value="Флеш">Флеш</option>
-                    <option value="Молотов">Молотов</option>
-                    <option value="HE">HE</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="throw-type-select">Тип броска:</label>
-                <select id="throw-type-select">
-                    <option value="Стандартный">Стандартный</option>
-                    <option value="Jump-throw">Jump-throw</option>
-                </select>
-            </div>
-             <div class="control-group">
-                <label for="image-count-select">Количество изображений:</label>
-                <select id="image-count-select">
-                    <option value="0">0</option>
-                    <option value="1" selected>1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
+            <div class="form-row grid-2x2">
+                <div class="control-group">
+                    <label for="type-select">Тип гранаты:</label>
+                    <select id="type-select">
+                        <option value="Дым">Дым</option>
+                        <option value="Флеш">Флеш</option>
+                        <option value="Молотов">Молотов</option>
+                        <option value="HE">HE</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="throw-type-select">Тип броска:</label>
+                    <select id="throw-type-select">
+                        <option value="Стандартный">Стандартный</option>
+                        <option value="Jump-throw">Jump-throw</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="image-count-select">Кол-во изображений:</label>
+                    <select id="image-count-select">
+                        <option value="0">0</option>
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="side-select">Сторона (цвет):</label>
+                    <select id="side-select">
+                        <option value="T">T (Оранжевый)</option>
+                        <option value="CT">CT (Синий)</option>
+                    </select>
+                </div>
             </div>
             
             <h2>Настройки отображения</h2>
-             <div class="control-group">
-                <label for="side-select">Сторона (цвет):</label>
-                <select id="side-select">
-                    <option value="T">T (Оранжевый)</option>
-                    <option value="CT">CT (Синий)</option>
-                </select>
-            </div>
 
 
             <h2>Сгенерированные имена файлов</h2>
