@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Получение элементов DOM ---
     // --- Получение элементов DOM ---
     // --- Получение элементов DOM ---
+    // --- Получение элементов DOM ---
     const canvas = document.getElementById('map-canvas');
     const ctx = canvas.getContext('2d');
     // Поля ввода
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toInput = document.getElementById('to-input');
     const typeSelect = document.getElementById('type-select');
     const throwTypeSelect = document.getElementById('throw-type-select');
+    const imageCountSelect = document.getElementById('image-count-select');
     const sideSelect = document.getElementById('side-select');
     // Кнопки
     const undoButton = document.getElementById('undo-button');
@@ -180,33 +182,71 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ## Функция для генерации и копирования данных
+    // ## Функция для транслитерации и создания безопасных имен файлов
+    function generateSafeFilename(text) {
+        const translit = {
+            'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
+            'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
+            'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts',
+            'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya'
+        };
+        return text.toLowerCase()
+            .split('')
+            .map(char => translit[char] || char)
+            .join('')
+            .replace(/[^a-z0-9_]/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+    }
+
+    // ## Функция для генерации и копирования данных
     copyButton.addEventListener('click', () => {
         if (points.length < 2) {
             alert('Нужно как минимум 2 точки (старт и конец).');
             return;
         }
+        if (!fromInput.value || !toInput.value) {
+            alert('Заполните поля "Откуда" и "Куда".');
+            return;
+        }
 
-        // ## 1. Конвертируем координаты в проценты
+        // ## 1. Генерируем базовое имя файла
+        const mapName = 'dust2'; // В будущем можно будет сделать динамическим
+        const fromSafe = generateSafeFilename(fromInput.value);
+        const toSafe = generateSafeFilename(toInput.value);
+        const baseFilename = `${fromSafe}_to_${toSafe}`;
+
+        // ## 2. Генерируем пути для видео и картинок
+        const videoPath = `assets/lineups/${mapName}/${baseFilename}.mp4`;
+        const imagePaths = [];
+        const imageCount = parseInt(imageCountSelect.value, 10);
+        for (let i = 1; i <= imageCount; i++) {
+            imagePaths.push(`assets/lineups/${mapName}/${baseFilename}_${i}.jpg`);
+        }
+        const lineup = { video: videoPath, images: imagePaths };
+
+        // ## 3. Конвертируем координаты в проценты
         const trajectory = points.map(p => ({
             x: parseFloat((p.x / canvas.width * 100).toFixed(2)),
             y: parseFloat((p.y / canvas.height * 100).toFixed(2))
         }));
 
-        // ## 2. Собираем все данные в один объект
+        // ## 4. Собираем все данные в один объект
         const nadeObject = {
-            id: `d2_${toInput.value.toLowerCase().replace(/ /g, '_')}_from_${fromInput.value.toLowerCase().replace(/ /g, '_')}_${Date.now()}`,
+            id: `${mapName}_${baseFilename}_${Date.now()}`,
             from: fromInput.value,
             to: toInput.value,
             type: typeSelect.value,
             throwType: throwTypeSelect.value,
             side: sideSelect.value,
-            trajectory: trajectory
+            trajectory: trajectory,
+            lineup: lineup // Добавляем секцию с медиа
         };
 
-        // ## 3. Превращаем объект в красивую строку
+        // ## 5. Превращаем объект в красивую строку
         const jsonString = JSON.stringify(nadeObject, null, 4);
 
-        // ## 4. Выводим в textarea и копируем в буфер обмена
+        // ## 6. Выводим в textarea и копируем в буфер обмена
         outputCode.value = jsonString;
         navigator.clipboard.writeText(jsonString).then(() => {
             copyButton.textContent = 'Скопировано!';
