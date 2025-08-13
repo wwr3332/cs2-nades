@@ -48,15 +48,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoPanelContent = document.getElementById('info-panel-content');
 
     let currentMapData = null;
+    let activeFilters = new Set(); // ## Храним активные фильтры здесь
 
     // --- ФУНКЦИИ РЕНДЕРИНГА ---
     function generateNadeTitle(nade) {
         return `[${nade.type}] ${nade.to}`;
     }
 
-    function renderNadeList(nades) {
+    function renderNadeList() {
+        const nades = currentMapData.nades;
+        // ## Фильтруем гранаты. Если фильтров нет, показываем все.
+        const filteredNades = activeFilters.size === 0
+            ? nades
+            : nades.filter(nade => activeFilters.has(nade.type));
+
         infoPanelContent.innerHTML = '';
-        nades.forEach(nade => {
+        filteredNades.forEach(nade => {
             const item = document.createElement('div');
             item.className = 'nade-list-item';
             item.textContent = generateNadeTitle(nade);
@@ -106,10 +113,36 @@ document.addEventListener('DOMContentLoaded', () => {
         mapTitle.textContent = currentMapData.name;
         mapImage.src = currentMapData.image;
         mapImage.alt = `Карта ${currentMapData.name}`;
-        
-        renderNadeList(currentMapData.nades);
 
-        document.body.classList.add('map-view-active'); // ## ДОБАВЛЕНО
+        // ## Создаем и настраиваем кнопки фильтров
+        const filterContainer = document.getElementById('filter-container');
+        filterContainer.innerHTML = '';
+        const nadeTypes = ["Дым", "Флеш", "Молотов", "HE"]; // Возможные типы гранат
+
+        nadeTypes.forEach(type => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn';
+            btn.textContent = type;
+            btn.dataset.type = type;
+
+            btn.addEventListener('click', () => {
+                // Переключаем фильтр
+                if (activeFilters.has(type)) {
+                    activeFilters.delete(type);
+                    btn.classList.remove('active');
+                } else {
+                    activeFilters.add(type);
+                    btn.classList.add('active');
+                }
+                // Перерисовываем список гранат с учетом фильтров
+                renderNadeList();
+            });
+            filterContainer.appendChild(btn);
+        });
+        
+        renderNadeList(); // Первый рендер списка
+
+        document.body.classList.add('map-view-active');
         header.style.display = 'none';
         document.body.style.overflow = 'hidden';
         mapSelectionView.style.display = 'none';
@@ -117,13 +150,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showMapSelection() {
-        document.body.classList.remove('map-view-active'); // ## ДОБАВЛЕНО
+        document.body.classList.remove('map-view-active');
         header.style.display = 'block';
         document.body.style.overflow = 'auto';
         mapView.style.display = 'none';
         mapSelectionView.style.display = 'block';
         removeHighlight();
         currentMapData = null;
+        activeFilters.clear(); // ## Сбрасываем фильтры при выходе на главный экран
     }
     
     // --- ФУНКЦИИ ПОДСВЕТКИ ---
