@@ -46,7 +46,6 @@ header {
 }
 
 #map-panel {
-#map-panel {
     flex: 6; /* 60% ширины */
     display: flex;
     align-items: center;
