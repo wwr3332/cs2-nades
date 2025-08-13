@@ -200,6 +200,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ## Функция для генерации и копирования данных
+    // ## Новая функция для отображения имен файлов и настройки их копирования
+    function displayGeneratedFilenames(videoPath, imagePaths) {
+        const container = document.getElementById('filenames-output');
+        container.innerHTML = ''; // Очищаем
+
+        const allPaths = [videoPath, ...imagePaths];
+
+        allPaths.forEach(path => {
+            // Извлекаем только имя файла из полного пути
+            const filename = path.split('/').pop();
+
+            const row = document.createElement('div');
+            row.className = 'filename-row';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'filename-input';
+            input.value = filename;
+            input.readOnly = true;
+
+            const btn = document.createElement('button');
+            btn.className = 'copy-filename-btn';
+            btn.textContent = 'Копировать';
+            btn.addEventListener('click', () => {
+                navigator.clipboard.writeText(filename).then(() => {
+                    btn.textContent = 'Ok!';
+                    setTimeout(() => { btn.textContent = 'Копировать'; }, 1000);
+                });
+            });
+
+            row.appendChild(input);
+            row.appendChild(btn);
+            container.appendChild(row);
+        });
+    }
+
+    // ## Функция для генерации и копирования данных
     copyButton.addEventListener('click', () => {
         if (points.length < 2) {
             alert('Нужно как минимум 2 точки (старт и конец).');
@@ -210,13 +247,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // ## 1. Генерируем базовое имя файла
-        const mapName = 'dust2'; // В будущем можно будет сделать динамическим
+        // 1. Генерируем базовое имя файла
+        const mapName = 'dust2';
         const fromSafe = generateSafeFilename(fromInput.value);
         const toSafe = generateSafeFilename(toInput.value);
         const baseFilename = `${fromSafe}_to_${toSafe}`;
 
-        // ## 2. Генерируем пути для видео и картинок
+        // 2. Генерируем пути для видео и картинок
         const videoPath = `assets/lineups/${mapName}/${baseFilename}.mp4`;
         const imagePaths = [];
         const imageCount = parseInt(imageCountSelect.value, 10);
@@ -225,33 +262,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const lineup = { video: videoPath, images: imagePaths };
 
-        // ## 3. Конвертируем координаты в проценты
+        // 3. Отображаем сгенерированные имена в новом UI
+        displayGeneratedFilenames(videoPath, imagePaths);
+
+        // 4. Конвертируем координаты в проценты
         const trajectory = points.map(p => ({
             x: parseFloat((p.x / canvas.width * 100).toFixed(2)),
             y: parseFloat((p.y / canvas.height * 100).toFixed(2))
         }));
 
-        // ## 4. Собираем все данные в один объект
+        // 5. Собираем все данные в один объект
         const nadeObject = {
-            id: `${mapName}_${baseFilename}_${Date.now()}`,
+            id: `${mapName}_${baseFilename}`, // Убрали timestamp
             from: fromInput.value,
             to: toInput.value,
             type: typeSelect.value,
             throwType: throwTypeSelect.value,
             side: sideSelect.value,
             trajectory: trajectory,
-            lineup: lineup // Добавляем секцию с медиа
+            lineup: lineup
         };
 
-        // ## 5. Превращаем объект в красивую строку
+        // 6. Превращаем объект в красивую строку
         const jsonString = JSON.stringify(nadeObject, null, 4);
 
-        // ## 6. Выводим в textarea и копируем в буфер обмена
+        // 7. Выводим в textarea и копируем в буфер обмена
         outputCode.value = jsonString;
         navigator.clipboard.writeText(jsonString).then(() => {
             copyButton.textContent = 'Скопировано!';
             setTimeout(() => {
-                copyButton.textContent = 'Копировать';
+                copyButton.textContent = 'Копировать JSON';
             }, 1500);
         }).catch(err => {
             console.error('Ошибка копирования: ', err);
