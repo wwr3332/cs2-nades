@@ -79,24 +79,30 @@ header {
     overflow-y: auto;
 }
 
-.info-panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Центрируем заголовок, т.к. кнопка уехала */
-    margin-bottom: 20px;
-    flex-shrink: 0;
+#info-panel-header {
+    /* Этот блок теперь пуст, убираем его отступы */
+    margin-bottom: 0;
+    padding: 0;
+    height: 0;
 }
 
 #info-panel-header h2 {
-    margin: 0;
+    display: none; /* Скрываем заголовок в старом месте */
+}
+
+/* Новый контейнер для кнопки и заголовка внизу */
+#map-view-footer {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 #back-to-selection-btn {
-    position: fixed; /* Позиционируем относительно окна браузера */
-    left: 20px;
-    bottom: 20px;
-    z-index: 1000; /* Размещаем поверх всех элементов */
-    
+    /* Убираем position:fixed, так как позиционируется родитель */
     background-color: #2a475e;
     color: #c7d5e0;
     border: 1px solid #66c0f4;
@@ -111,7 +117,18 @@ header {
 #back-to-selection-btn:hover {
     background-color: #66c0f4;
     color: #1b2838;
-    transform: scale(1.05);
+}
+
+/* Стили для плашки с заголовком */
+#map-title {
+    background-color: #1b2838;
+    color: #66c0f4;
+    font-size: 16px;
+    padding: 11px 15px;
+    border-radius: 5px;
+    margin: 0;
+    border: 1px solid #2a475e;
+    font-weight: normal;
 }
 
 #info-panel-content {
