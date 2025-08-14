@@ -168,11 +168,13 @@ function renderNadeDetails(nade) {
 
     infoPanelContent.innerHTML = `
         <div class="nade-details-container">
-            <button class="back-to-list-btn">‹ Назад к списку гранат</button>
-            <h3>${generateNadeTitle(nade)}</h3>
-            <div class="nade-meta-details">
-                <p><strong>Откуда:</strong> ${nade.from}</p>
-                <p><strong>Тип броска:</strong> ${nade.throwType}</p>
+            <div class="details-header">
+                <button class="back-to-list-btn">‹ Назад</button>
+                <h3>${generateNadeTitle(nade)}</h3>
+                <div class="nade-meta-details">
+                    <p><strong>Откуда:</strong> ${nade.from}</p>
+                    <p><strong>Тип броска:</strong> ${nade.throwType}</p>
+                </div>
             </div>
             ${mediaHTML}
         </div>`;

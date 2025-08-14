@@ -300,8 +300,8 @@ header {
 }
 
 .thumbnail {
-    width: 80px;
-    height: 45px;
+    width: 100px; /* Увеличили ширину */
+    height: 56px; /* Увеличили высоту (пропорционально) */
     border: 2px solid transparent;
     border-radius: 3px;
     cursor: pointer;
@@ -327,11 +327,11 @@ header {
 
 
 .nade-meta-details {
-    background-color: #1b2838;
-    padding: 10px;
-    border-radius: 3px;
-    margin-bottom: 15px;
+    /* Убрали фон и лишние отступы, так как элемент теперь в одной строке */
     font-size: 14px;
+    text-align: left;
+    margin-left: auto; /* Прижимаем этот блок к правому краю */
+    white-space: nowrap; /* Запрещаем перенос строк */
 }
 .nade-meta-details p {
     margin: 0;
@@ -350,14 +350,16 @@ header {
     border-radius: 3px;
 }
 .back-to-list-btn {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
+    /* Адаптируем кнопку для размещения в одной строке */
+    width: auto;
+    padding: 8px 12px;
+    margin-bottom: 0;
     background-color: #4b6a85;
     border: none;
     color: white;
     border-radius: 3px;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 /* Стили для подсветки на карте (без изменений) */
