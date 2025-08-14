@@ -344,7 +344,7 @@ header {
 
 .main-media-view.zoomed video,
 .main-media-view.zoomed img {
-    transform: scale(1.5); /* Увеличиваем медиа на 50% */
+    transform: scale(4.0); /* Увеличиваем медиа на 400% */
 }
 
 .thumbnail-strip {
