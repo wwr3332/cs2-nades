@@ -167,9 +167,17 @@ async function renderNadeDetails(nade) {
     infoPanelContent.innerHTML = `
         <div class="nade-details-container">
             <div class="details-header">
-                <button class="back-to-list-btn">‹ Назад</button>
-                <h3>${generateNadeTitle(nade)}</h3>
-                <div class="nade-meta-details">
+                <button class="back-to-list-btn header-plate">‹ Назад</button>
+                <div class="header-plate header-plate--title">
+                    <h3>${generateNadeTitle(nade)}</h3>
+                </div>
+                
+                <div class="header-spacer"></div>
+
+                <button id="zoom-media-btn" class="header-plate" title="Увеличить медиа">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M10.027 4.313a.5.5 0 0 1 .707 0l3 3a.5.5 0 0 1 0 .707l-3 3a.5.5 0 0 1-.707-.707L12.793 7.5l-2.766-2.765a.5.5 0 0 1 0-.707z"/><path d="M4.5 7.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/></svg>
+                </button>
+                <div class="nade-meta-details header-plate">
                     <p><strong>Откуда:</strong> ${nade.from}</p>
                     <p><strong>Тип броска:</strong> ${nade.throwType}</p>
                 </div>

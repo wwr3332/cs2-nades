@@ -419,11 +419,9 @@ header {
 
 
 .nade-meta-details {
-    /* Убрали фон и лишние отступы, так как элемент теперь в одной строке */
     font-size: 14px;
     text-align: left;
-    margin-left: auto; /* Прижимаем этот блок к правому краю */
-    white-space: nowrap; /* Запрещаем перенос строк */
+    /* margin-left: auto убран, теперь позиционирование через распорку */
 }
 .nade-meta-details p {
     margin: 0;
@@ -442,16 +440,15 @@ header {
     border-radius: 3px;
 }
 .back-to-list-btn {
-    /* Адаптируем кнопку для размещения в одной строке */
+    /* Свойства фона, паддинга и др. теперь в .header-plate */
     width: auto;
-    padding: 8px 12px;
     margin-bottom: 0;
-    background-color: #4b6a85;
-    border: none;
-    color: white;
-    border-radius: 3px;
     cursor: pointer;
-    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+
+.back-to-list-btn:hover {
+    background-color: #3b576e;
 }
 
 /* Стили для подсветки на карте (без изменений) */
