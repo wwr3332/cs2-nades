@@ -390,7 +390,7 @@ header {
 .map-view-active #map-view {
     height: 100vh;
     padding: 0 20px; /* Возвращаем отступ слева для выравнивания с кнопкой */
-    gap: 20px;
+    gap: 0; /* Убираем отступ между панелями */
     box-sizing: border-box;
 }
 
