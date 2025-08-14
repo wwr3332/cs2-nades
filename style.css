@@ -306,9 +306,30 @@ header {
     background-color: #3b576e;
 }
 
+.zoom-controls-plate {
+    gap: 10px;
+}
+.zoom-controls-plate span {
+    font-weight: bold;
+    color: #a0aec0;
+}
+.zoom-controls-plate button {
+    background: none;
+    border: none;
+    color: #c7d5e0;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+.zoom-controls-plate button:hover {
+    background-color: #4b6a85;
+}
+
 #zoom-media-btn svg {
-    display: block;
-    transform: rotate(45deg); /* Поворачиваем иконку для "зума" */
+    display: block; /* Оставляем, чтобы svg вел себя как блочный элемент */
 }
 
 .media-gallery {
@@ -342,11 +363,7 @@ header {
     transition: transform 0.3s ease-in-out;
 }
 
-/* Это правило больше не нужно, так как зум теперь управляется через JS */
-.main-media-view.zoomed video,
-.main-media-view.zoomed img {
-    /* transform: scale(4.0); */
-}
+
 
 /* Стили для нового ползунка зума */
 .zoom-slider {
