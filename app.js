@@ -127,7 +127,7 @@ function renderNadeList() {
     });
 }
 
-function renderNadeDetails(nade) {
+async function renderNadeDetails(nade) {
     const hasVideo = nade.lineup && nade.lineup.video && nade.lineup.video !== "";
     const hasImages = nade.lineup && nade.lineup.images && nade.lineup.images.length > 0;
 
@@ -136,30 +136,26 @@ function renderNadeDetails(nade) {
     if (!hasVideo && !hasImages) {
         mediaHTML = '<p>Медиафайлы для этой гранаты еще не добавлены.</p>';
     } else {
-        // По умолчанию в главном окне показываем видео, если оно есть.
         const mainViewContent = hasVideo 
             ? `<video src="${nade.lineup.video}" controls autoplay loop muted></video>`
             : `<img src="${nade.lineup.images[0]}" alt="Просмотр лайнапа">`;
 
-        // Генерируем миниатюру для видео
+        // Добавляем ID для img тега видео-миниатюры, чтобы его потом найти и заменить src
         const videoThumbnailHTML = hasVideo ? `
             <div class="thumbnail ${!hasImages ? 'active' : ''}" data-media-type="video">
-                <img src="assets/icons/video_thumbnail.svg" alt="Видео">
+                <img id="video-thumb-img" src="assets/icons/video_thumbnail.svg" alt="Видео">
             </div>` : '';
 
-        // Генерируем миниатюры для картинок
         const imageThumbnailsHTML = hasImages ? nade.lineup.images.map((src, i) => `
             <div class="thumbnail ${!hasVideo && i === 0 ? 'active' : ''}" data-media-type="image" data-media-src="${src}">
                 <img src="${src}" alt="Скриншот ${i + 1}">
             </div>`).join('') : '';
         
-        // Собираем всю галерею
-        // Собираем всю галерею
         mediaHTML = `
             <div class="media-gallery">
                 <div id="main-media-view" class="main-media-view">${mainViewContent}</div>
                 <div class="gallery-spacer"></div>
-                ${ (hasVideo && hasImages) || nade.lineup.images.length > 1 ? `
+                ${ (hasVideo && hasImages) || (nade.lineup.images && nade.lineup.images.length > 1) ? `
                     <div class="thumbnail-strip">
                         ${videoThumbnailHTML}
                         ${imageThumbnailsHTML}
@@ -181,37 +177,75 @@ function renderNadeDetails(nade) {
             ${mediaHTML}
         </div>`;
     
-    // Привязываем событие к кнопке "Назад"
     document.querySelector('.back-to-list-btn').addEventListener('click', () => {
         infoPanelContent.innerHTML = '';
     });
 
-    // Добавляем интерактивность галерее, если есть медиафайлы
     if (hasVideo || hasImages) {
         const mainMediaView = document.getElementById('main-media-view');
         const thumbnails = document.querySelectorAll('.thumbnail');
-        const videoSrc = nade.lineup.video; // Сохраняем для обработчика
+        const videoSrc = nade.lineup.video;
 
         thumbnails.forEach(thumb => {
             thumb.addEventListener('click', (e) => {
-                // Снимаем класс 'active' со всех миниатюр
                 thumbnails.forEach(t => t.classList.remove('active'));
-                // Добавляем класс 'active' к нажатой
                 e.currentTarget.classList.add('active');
 
                 const mediaType = e.currentTarget.dataset.mediaType;
-
                 if (mediaType === 'video') {
                     mainMediaView.innerHTML = `<video src="${videoSrc}" controls autoplay loop muted></video>`;
                 } else if (mediaType === 'image') {
-                    const imgSrc = e.currentTarget.dataset.mediaSrc;
-                    mainMediaView.innerHTML = `<img src="${imgSrc}" alt="Просмотр лайнапа">`;
+                    mainMediaView.innerHTML = `<img src="${e.currentTarget.dataset.mediaSrc}" alt="Просмотр лайнапа">`;
                 }
             });
         });
     }
+
+    // После того как вся структура вставлена в DOM, генерируем и подставляем кадр из видео
+    if (hasVideo) {
+        try {
+            const videoThumbImg = document.getElementById('video-thumb-img');
+            const thumbnailUrl = await generateVideoThumbnail(nade.lineup.video);
+            if (videoThumbImg) {
+                videoThumbImg.src = thumbnailUrl;
+            }
+        } catch (error) {
+            console.error("Не удалось сгенерировать миниатюру для видео:", error);
+            // Если произошла ошибка, пользователь просто увидит серую иконку-заглушку
+        }
+    }
 }
 
+// --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+async function generateVideoThumbnail(videoSrc) {
+    return new Promise((resolve, reject) => {
+        const video = document.createElement('video');
+        video.crossOrigin = 'anonymous'; // На случай, если видео будет с другого домена
+        video.preload = 'metadata';
+        video.muted = true;
+
+        // Как только метаданные загружены, переходим на 0.1 секунду
+        video.onloadedmetadata = () => {
+            video.currentTime = 0.1;
+        };
+
+        // Когда кадр готов, "фотографируем" его на canvas
+        video.onseeked = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/jpeg'));
+        };
+
+        video.onerror = (e) => {
+            reject(`Ошибка загрузки видео для создания миниатюры: ${e}`);
+        };
+
+        video.src = videoSrc;
+    });
+}
 // --- ФУНКЦИИ УПРАВЛЕНИЯ ВИДОМ ---
 async function showMapView(mapId) {
     try {
