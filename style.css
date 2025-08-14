@@ -48,10 +48,21 @@ header {
 #map-panel {
     flex: 6; /* 60% ширины */
     display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
+    flex-direction: column; /* Элементы в столбик: сначала список, потом карта */
+    justify-content: flex-end; /* Прижимаем все к низу, чтобы подвал не перекрывал */
     box-sizing: border-box;
-    padding-bottom: 90px; /* ИЗМЕНЕНО: Возвращаем отступ, чтобы карта была НАД кнопками */
+    padding-bottom: 90px;
+}
+
+#nade-list-on-map {
+    display: flex;
+    flex-wrap: wrap; /* Та самая "россыпь" */
+    gap: 8px; /* Расстояние между кнопками */
+    justify-content: center; /* Центрируем кнопки по горизонтали */
+    max-height: 140px; /* Ограничиваем высоту блока, чтобы не занимал много места */
+    overflow-y: auto;  /* Добавляем скролл, если гранат очень много */
+    margin-bottom: 15px; /* Отступ между списком и картой */
+    padding: 5px;
 }
 
 /* Стили для контейнера с фильтрами */
@@ -192,11 +203,7 @@ header {
 #info-panel-content {
     flex-grow: 1;
     overflow-y: auto;
-    display: flex;
-    flex-direction: row; /* ИЗМЕНЕНО: Элементы идут в строку */
-    flex-wrap: wrap; /* ИЗМЕНЕНО: Разрешаем перенос на новую строку */
-    align-content: flex-start; /* ИЗМЕНЕНО: Новые строки начинаются сверху */
-    gap: 10px; /* ИЗМЕНЕНО: Задаем расстояние между кнопками */
+    /* Убрали все flex-свойства, т.к. тут теперь только детальный просмотр, а не список */
 }
 
 /* Общие стили для списка гранат */

@@ -14,6 +14,8 @@ const mapTitle = document.getElementById('map-title');
 const mapImage = document.getElementById('map-image');
 const infoPanelContent = document.getElementById('info-panel-content');
 
+const nadeListOnMap = document.getElementById('nade-list-on-map');
+
 // --- ФУНКЦИИ РЕНДЕРИНГА ---
 function generateNadeTitle(nade) {
     return `[${nade.type}] ${nade.to}`;
@@ -76,32 +78,31 @@ function drawAllTrajectories(nades) {
 }
 
 function renderNadeList() {
+    // Очищаем панель деталей, на случай если она была открыта при смене фильтра
+    infoPanelContent.innerHTML = '';
+    // Очищаем старый список гранат
+    nadeListOnMap.innerHTML = '';
+
     const nades = currentMapData.nades;
-    const filteredNades = activeFilters.size === 0 ? nades : nades.filter(nade => activeFilters.has(nade.type));
-    
+    const filteredNades = activeFilters.size === 0 ?
+        nades : nades.filter(nade => activeFilters.has(nade.type));
+
     // Рисуем отфильтрованные траектории на карте
     drawAllTrajectories(filteredNades);
 
-    // Рендерим список справа
-    // Рендерим список справа
-    // Рендерим список справа
-    infoPanelContent.innerHTML = '';
-    
+    // Рендерим список над картой
     const typeToClass = {
         'Дым': 'nade-type-smoke',
         'Флеш': 'nade-type-flash',
         'Молотов': 'nade-type-molotov',
         'HE': 'nade-type-he'
     };
-    
     // ## Определяем порядок сортировки
     const sortOrder = ['Дым', 'Флеш', 'Молотов', 'HE'];
-    
     // ## Сортируем массив гранат
     filteredNades.sort((a, b) => {
         return sortOrder.indexOf(a.type) - sortOrder.indexOf(b.type);
     });
-
     filteredNades.forEach(nade => {
         const item = document.createElement('div');
         item.className = 'nade-list-item';
@@ -120,9 +121,9 @@ function renderNadeList() {
         item.addEventListener('mouseleave', () => {
              document.querySelectorAll('.nade-trajectory-group').forEach(g => g.style.opacity = '0.7');
         });
-        
+
         item.addEventListener('click', () => renderNadeDetails(nade));
-        infoPanelContent.appendChild(item);
+        nadeListOnMap.appendChild(item);
     });
 }
 
@@ -153,7 +154,8 @@ function renderNadeDetails(nade) {
         </div>
     `;
     document.querySelector('.back-to-list-btn').addEventListener('click', () => {
-        renderNadeList();
+        // Просто очищаем панель с деталями, список над картой остается на месте
+        infoPanelContent.innerHTML = '';
     });
 }
 
