@@ -128,35 +128,84 @@ function renderNadeList() {
 }
 
 function renderNadeDetails(nade) {
-    // Проверяем наличие хоть каких-то медиа
-    const hasLineup = nade.lineup && (nade.lineup.video && nade.lineup.video !== "") || (nade.lineup.images && nade.lineup.images.length > 0);
+    const hasVideo = nade.lineup && nade.lineup.video && nade.lineup.video !== "";
+    const hasImages = nade.lineup && nade.lineup.images && nade.lineup.images.length > 0;
 
     let mediaHTML;
-    if (hasLineup) {
-        const videoHTML = (nade.lineup.video && nade.lineup.video !== "") ? `<video src="${nade.lineup.video}" controls autoplay loop muted></video>` : '';
-        const imagesHTML = nade.lineup.images && nade.lineup.images.length > 0
-            ? nade.lineup.images.map(src => `<img src="${src}" alt="Скриншот лайнапа">`).join('')
-            : '';
-        mediaHTML = `${videoHTML}<div class="nade-details-images">${imagesHTML}</div>`;
-    } else {
+
+    if (!hasVideo && !hasImages) {
         mediaHTML = '<p>Медиафайлы для этой гранаты еще не добавлены.</p>';
+    } else {
+        // По умолчанию в главном окне показываем видео, если оно есть.
+        const mainViewContent = hasVideo 
+            ? `<video src="${nade.lineup.video}" controls autoplay loop muted></video>`
+            : `<img src="${nade.lineup.images[0]}" alt="Просмотр лайнапа">`;
+
+        // Генерируем миниатюру для видео
+        const videoThumbnailHTML = hasVideo ? `
+            <div class="thumbnail ${!hasImages ? 'active' : ''}" data-media-type="video">
+                <img src="assets/icons/video_thumbnail.svg" alt="Видео">
+            </div>` : '';
+
+        // Генерируем миниатюры для картинок
+        const imageThumbnailsHTML = hasImages ? nade.lineup.images.map((src, i) => `
+            <div class="thumbnail ${!hasVideo && i === 0 ? 'active' : ''}" data-media-type="image" data-media-src="${src}">
+                <img src="${src}" alt="Скриншот ${i + 1}">
+            </div>`).join('') : '';
+        
+        // Собираем всю галерею
+        mediaHTML = `
+            <div class="media-gallery">
+                <div id="main-media-view" class="main-media-view">${mainViewContent}</div>
+                ${ (hasVideo && hasImages) || nade.lineup.images.length > 1 ? `
+                    <div class="thumbnail-strip">
+                        ${videoThumbnailHTML}
+                        ${imageThumbnailsHTML}
+                    </div>` : ''
+                }
+            </div>`;
     }
 
     infoPanelContent.innerHTML = `
         <div class="nade-details-container">
             <button class="back-to-list-btn">‹ Назад к списку гранат</button>
             <h3>${generateNadeTitle(nade)}</h3>
+            ${mediaHTML}
             <div class="nade-meta-details">
                 <p><strong>Откуда:</strong> ${nade.from}</p>
                 <p><strong>Тип броска:</strong> ${nade.throwType}</p>
             </div>
-            ${mediaHTML}
-        </div>
-    `;
+        </div>`;
+    
+    // Привязываем событие к кнопке "Назад"
     document.querySelector('.back-to-list-btn').addEventListener('click', () => {
-        // Просто очищаем панель с деталями, список над картой остается на месте
         infoPanelContent.innerHTML = '';
     });
+
+    // Добавляем интерактивность галерее, если есть медиафайлы
+    if (hasVideo || hasImages) {
+        const mainMediaView = document.getElementById('main-media-view');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const videoSrc = nade.lineup.video; // Сохраняем для обработчика
+
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', (e) => {
+                // Снимаем класс 'active' со всех миниатюр
+                thumbnails.forEach(t => t.classList.remove('active'));
+                // Добавляем класс 'active' к нажатой
+                e.currentTarget.classList.add('active');
+
+                const mediaType = e.currentTarget.dataset.mediaType;
+
+                if (mediaType === 'video') {
+                    mainMediaView.innerHTML = `<video src="${videoSrc}" controls autoplay loop muted></video>`;
+                } else if (mediaType === 'image') {
+                    const imgSrc = e.currentTarget.dataset.mediaSrc;
+                    mainMediaView.innerHTML = `<img src="${imgSrc}" alt="Просмотр лайнапа">`;
+                }
+            });
+        });
+    }
 }
 
 // --- ФУНКЦИИ УПРАВЛЕНИЯ ВИДОМ ---
