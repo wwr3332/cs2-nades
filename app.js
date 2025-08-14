@@ -140,15 +140,8 @@ async function renderNadeDetails(nade) {
             ? `<video src="${nade.lineup.video}" controls autoplay loop muted></video>`
             : `<img src="${nade.lineup.images[0]}" alt="Просмотр лайнапа">`;
 
-        const videoThumbnailHTML = hasVideo ? `
-            <div class="thumbnail" data-media-type="video">
-                <img id="video-thumb-img" src="assets/icons/video_thumbnail.svg" alt="Видео">
-            </div>` : '';
-
-        const imageThumbnailsHTML = hasImages ? nade.lineup.images.map((src, i) => `
-            <div class="thumbnail" data-media-type="image" data-media-src="${src}">
-                <img src="${src}" alt="Скриншот ${i + 1}">
-            </div>`).join('') : '';
+        const videoThumbnailHTML = hasVideo ? `<div class="thumbnail" data-media-type="video"><img id="video-thumb-img" src="assets/icons/video_thumbnail.svg" alt="Видео"></div>` : '';
+        const imageThumbnailsHTML = hasImages ? nade.lineup.images.map((src, i) => `<div class="thumbnail" data-media-type="image" data-media-src="${src}"><img src="${src}" alt="Скриншот ${i + 1}"></div>`).join('') : '';
         
         mediaHTML = `
             <div class="media-gallery">
@@ -167,19 +160,18 @@ async function renderNadeDetails(nade) {
         <div class="nade-details-container">
             <div class="details-header">
                 <button class="back-to-list-btn header-plate">‹ Назад</button>
-                <div class="header-plate header-plate--title">
-                    <h3>${generateNadeTitle(nade)}</h3>
-                </div>
+                <div class="header-plate header-plate--title"><h3>${generateNadeTitle(nade)}</h3></div>
                 <div class="nade-meta-details header-plate">
                     <span class="meta-item"><strong>Откуда:</strong> ${nade.from}</span>
                     <span class="meta-item-separator"></span>
                     <span class="meta-item"><strong>Тип броска:</strong> ${nade.throwType}</span>
                 </div>
-                
                 <div class="header-spacer"></div>
-
-                <button id="zoom-media-btn" class="header-plate" title="Увеличить медиа">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M10.027 4.313a.5.5 0 0 1 .707 0l3 3a.5.5 0 0 1 0 .707l-3 3a.5.5 0 0 1-.707-.707L12.793 7.5l-2.766-2.765a.5.5 0 0 1 0-.707z"/><path d="M4.5 7.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/></svg>
+                <div class="header-plate header-plate--zoom-controls">
+                    <input type="range" id="zoom-slider" class="zoom-slider" min="1" max="8" step="0.3" value="4">
+                </div>
+                <button id="zoom-media-btn" class="header-plate" title="Сбросить зум">
+                    <svg xmlns="http://www.w.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M10.027 4.313a.5.5 0 0 1 .707 0l3 3a.5.5 0 0 1 0 .707l-3 3a.5.5 0 0 1-.707-.707L12.793 7.5l-2.766-2.765a.5.5 0 0 1 0-.707z"/><path d="M4.5 7.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/></svg>
                 </button>
             </div>
             ${mediaHTML}
@@ -188,19 +180,25 @@ async function renderNadeDetails(nade) {
     // --- ПРИВЯЗКА СОБЫТИЙ ПОСЛЕ РЕНДЕРА ---
 
     const mainMediaView = document.getElementById('main-media-view');
+    const zoomSlider = document.getElementById('zoom-slider');
+    let currentMediaElement = mainMediaView ? mainMediaView.querySelector('video, img') : null;
 
+    // Функция для обновления зума
+    const applyZoom = () => {
+        if (currentMediaElement && zoomSlider) {
+            currentMediaElement.style.transform = `scale(${zoomSlider.value})`;
+        }
+    };
+
+    // Применяем зум при изменении слайдера
+    if (zoomSlider) {
+        zoomSlider.addEventListener('input', applyZoom);
+    }
+    
     // Кнопка "Назад"
     document.querySelector('.back-to-list-btn').addEventListener('click', () => {
         infoPanelContent.innerHTML = '';
     });
-
-    // Кнопка "Зум"
-    const zoomBtn = document.getElementById('zoom-media-btn');
-    if (zoomBtn && mainMediaView) {
-        zoomBtn.addEventListener('click', () => {
-            mainMediaView.classList.toggle('zoomed');
-        });
-    }
 
     // Интерактивность галереи
     if (hasVideo || hasImages) {
@@ -209,9 +207,6 @@ async function renderNadeDetails(nade) {
 
         thumbnails.forEach(thumb => {
             thumb.addEventListener('click', (e) => {
-                // При клике на любую миниатюру сбрасываем зум
-                mainMediaView.classList.remove('zoomed');
-                
                 thumbnails.forEach(t => t.classList.remove('active'));
                 e.currentTarget.classList.add('active');
 
@@ -221,6 +216,9 @@ async function renderNadeDetails(nade) {
                 } else if (mediaType === 'image') {
                     mainMediaView.innerHTML = `<img src="${e.currentTarget.dataset.mediaSrc}" alt="Просмотр лайнапа">`;
                 }
+                // После смены медиа, находим новый элемент и применяем к нему текущий зум
+                currentMediaElement = mainMediaView.querySelector('video, img');
+                applyZoom();
             });
         });
     }
@@ -238,6 +236,9 @@ async function renderNadeDetails(nade) {
             console.error("Не удалось сгенерировать миниатюру для видео:", error);
         }
     }
+    
+    // Применяем начальный зум
+    applyZoom();
 }
 
     // --- Логика для кнопки зума ---

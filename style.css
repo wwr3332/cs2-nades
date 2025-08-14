@@ -342,9 +342,40 @@ header {
     transition: transform 0.3s ease-in-out;
 }
 
+/* Это правило больше не нужно, так как зум теперь управляется через JS */
 .main-media-view.zoomed video,
 .main-media-view.zoomed img {
-    transform: scale(4.0); /* Увеличиваем медиа на 400% */
+    /* transform: scale(4.0); */
+}
+
+/* Стили для нового ползунка зума */
+.zoom-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 120px;
+    height: 8px;
+    background: #1b2838;
+    border-radius: 5px;
+    outline: none;
+    transition: opacity 0.2s;
+}
+
+.zoom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #66c0f4;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.zoom-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #66c0f4;
+    cursor: pointer;
+    border-radius: 50%;
 }
 
 .thumbnail-strip {
