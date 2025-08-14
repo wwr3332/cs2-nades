@@ -309,12 +309,12 @@ header {
     display: flex;
     gap: 8px;
     margin-top: 8px;
-    margin-bottom: 5px; /* Небольшой отступ от низа панели */
+    margin-bottom: 12px; /* Увеличиваем отступ от низа панели */
 }
 
 .thumbnail {
-    width: 144px; /* Финальное увеличение ширины */
-    height: 81px; /* И высоты (16:9) */
+    width: 160px; /* Финальное увеличение ширины */
+    height: 90px; /* И высоты (16:9) */
     border: 2px solid transparent;
     border-radius: 3px;
     cursor: pointer;
