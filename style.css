@@ -104,6 +104,19 @@ header {
     opacity: 1 !important; /* Делаем траекторию полностью непрозрачной при наведении */
 }
 
+/* Стили для изображений в детальном просмотре */
+.nade-details-images {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.nade-details-images img {
+    max-width: 100%;
+    border-radius: 3px;
+    border: 1px solid #4b6a85;
+}
+
 #map-image {
     display: block;
     border-radius: 5px;

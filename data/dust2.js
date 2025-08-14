@@ -162,7 +162,50 @@ export default {
         ]
     }
 },
-
+{
+    "id": "dust2_test_to_test",
+    "from": "test",
+    "to": "test",
+    "type": "Флеш",
+    "throwType": "Стандартный",
+    "side": "T",
+    "trajectory": [
+        {
+            "x": 50.29,
+            "y": 87.4
+        },
+        {
+            "x": 42.15,
+            "y": 22.69
+        }
+    ],
+    "lineup": {
+        "video": "assets/lineups/dust2/test_to_test.mp4",
+        "images": []
+    }
+},
+{
+    "id": "dust2_test2_to_test2",
+    "from": "test2",
+    "to": "test2",
+    "type": "HE",
+    "throwType": "Стандартный",
+    "side": "T",
+    "trajectory": [
+        {
+            "x": 24.01,
+            "y": 88.06
+        },
+        {
+            "x": 23.25,
+            "y": 46.15
+        }
+    ],
+    "lineup": {
+        "video": "assets/lineups/dust2/test2_to_test2.mp4",
+        "images": []
+    }
+},
 
             
     ]
