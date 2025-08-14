@@ -228,6 +228,17 @@ async function renderNadeDetails(nade) {
     }
 }
 
+    // --- Логика для кнопки зума ---
+    const zoomBtn = document.getElementById('zoom-media-btn');
+    const mainMediaView = document.getElementById('main-media-view');
+
+    if (zoomBtn && mainMediaView) {
+        zoomBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Предотвращаем всплытие события
+            mainMediaView.classList.toggle('zoomed');
+        });
+    }
+
 // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
 async function generateVideoThumbnail(videoSrc) {
     return new Promise((resolve, reject) => {
