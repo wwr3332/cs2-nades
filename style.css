@@ -49,8 +49,8 @@ header {
     flex: 6; /* 60% ширины */
     display: flex;
     flex-direction: column;
-    /* Центрируем по горизонтали список и карту */
-    align-items: center;
+    /* Выравниваем по левому краю */
+    align-items: flex-start;
     box-sizing: border-box;
     padding-bottom: 90px;
     /* Предотвращаем выход контента за границы панели при малой высоте экрана */
@@ -335,7 +335,7 @@ header {
 
 .map-view-active #map-view {
     height: 100vh;
-    padding-right: 20px; /* ИЗМЕНЕНО: Убрали отступ слева, оставили только справа */
+    padding: 0 20px; /* Возвращаем отступ слева для выравнивания с кнопкой */
     gap: 20px;
     box-sizing: border-box;
 }
