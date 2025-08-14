@@ -46,7 +46,7 @@ header {
 }
 
 #map-panel {
-    flex: 6; /* 60% ширины */
+    flex: 0 0 auto; /* ЗАДАЕМ ШИРИНУ ПО КОНТЕНТУ: не растягивать, не сжимать */
     display: flex;
     flex-direction: column;
     /* Выравниваем по левому краю */
@@ -146,7 +146,7 @@ header {
 }
 
 #info-panel {
-    flex: 4; /* 40% ширины */
+    flex-grow: 1; /* РАСТЯГИВАЕМ НА ВСЁ ОСТАВШЕЕСЯ МЕСТО */
     background-color: #2a475e;
     border-radius: 5px;
     padding: 20px 20px 20px 15px; /* Уменьшаем левый отступ, чтобы быть ближе к карте */
