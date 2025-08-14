@@ -202,12 +202,15 @@ async function renderNadeDetails(nade) {
     }
 
     // После того как вся структура вставлена в DOM, генерируем и подставляем кадр из видео
+    // После того как вся структура вставлена в DOM, генерируем и подставляем кадр из видео
     if (hasVideo) {
         try {
             const videoThumbImg = document.getElementById('video-thumb-img');
-            const thumbnailUrl = await generateVideoThumbnail(nade.lineup.video);
             if (videoThumbImg) {
+                const thumbnailUrl = await generateVideoThumbnail(nade.lineup.video);
                 videoThumbImg.src = thumbnailUrl;
+                // Добавляем класс к родительской миниатюре, чтобы показать иконку "Play"
+                videoThumbImg.parentElement.classList.add('video-thumb-loaded');
             }
         } catch (error) {
             console.error("Не удалось сгенерировать миниатюру для видео:", error);
