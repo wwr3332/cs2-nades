@@ -289,22 +289,19 @@ header {
 
 .main-media-view {
     width: 100%;
-    /* aspect-ratio убран, высота теперь полностью гибкая */
     background-color: #1b2838;
     border-radius: 3px;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-grow: 1; /* Основное окно медиа растягивается, прижимая миниатюры вниз */
-    min-height: 0; /* Трюк для корректной работы flex-grow */
+    flex-shrink: 0; /* Запрещаем сжиматься */
 }
 
 .main-media-view video,
 .main-media-view img {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
+    height: auto; /* Высота авто, чтобы убрать черные полосы */
     display: block;
 }
 
@@ -312,11 +309,12 @@ header {
     display: flex;
     gap: 8px;
     margin-top: 8px;
+    margin-bottom: 5px; /* Небольшой отступ от низа панели */
 }
 
 .thumbnail {
-    width: 128px; /* Значительно увеличиваем ширину */
-    height: 72px; /* И высоту (сохраняя пропорцию 16:9) */
+    width: 144px; /* Финальное увеличение ширины */
+    height: 81px; /* И высоты (16:9) */
     border: 2px solid transparent;
     border-radius: 3px;
     cursor: pointer;

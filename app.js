@@ -154,9 +154,11 @@ function renderNadeDetails(nade) {
             </div>`).join('') : '';
         
         // Собираем всю галерею
+        // Собираем всю галерею
         mediaHTML = `
             <div class="media-gallery">
                 <div id="main-media-view" class="main-media-view">${mainViewContent}</div>
+                <div class="gallery-spacer"></div>
                 ${ (hasVideo && hasImages) || nade.lineup.images.length > 1 ? `
                     <div class="thumbnail-strip">
                         ${videoThumbnailHTML}
