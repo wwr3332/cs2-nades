@@ -297,9 +297,9 @@ header {
     color: #66c0f4;
 }
 
+
 #zoom-media-btn {
-    cursor: pointer;
-    transition: background-color 0.2s;
+    /* Стили перенесены в общий .zoom-controls-plate button */
 }
 
 #zoom-media-btn:hover {
