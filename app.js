@@ -4,6 +4,11 @@ let currentMapData = null;
 let activeFilters = new Set();
 const colors = { T: '#ffae00', CT: '#00bfff' };
 
+// --- Аудио эффекты ---
+// Поместите ваши файлы в папку /assets/sounds/
+const zoomInSound = new Audio('assets/sounds/zoom-in.mp3');
+const zoomOutSound = new Audio('assets/sounds/zoom-out.mp3');
+
 // --- Получение элементов DOM ---
 const header = document.querySelector('header');
 const mapSelectionView = document.getElementById('map-selection');
@@ -210,13 +215,18 @@ async function renderNadeDetails(nade) {
     }
 
     // Кнопка переключает между 1.0 и запомненным уровнем
+    // Кнопка переключает между 1.0 и запомненным уровнем
     if (zoomBtn && zoomSlider) {
         zoomBtn.addEventListener('click', () => {
             const currentZoom = parseFloat(zoomSlider.value);
             if (currentZoom > 1.0) { // Если зум включен, выключаем
+                zoomOutSound.currentTime = 0; // Сбрасываем звук на начало
+                zoomOutSound.play();
                 zoomSlider.value = 1.0;
                 updateTransform(1.0);
             } else { // Если зум выключен, включаем
+                zoomInSound.currentTime = 0; // Сбрасываем звук на начало
+                zoomInSound.play();
                 zoomSlider.value = savedZoomLevel;
                 updateTransform(savedZoomLevel);
             }

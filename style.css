@@ -298,9 +298,6 @@ header {
 }
 
 
-#zoom-media-btn {
-    /* Стили перенесены в общий .zoom-controls-plate button */
-}
 
 #zoom-media-btn:hover {
     background-color: #3b576e;
