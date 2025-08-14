@@ -83,10 +83,24 @@ function renderNadeList() {
     drawAllTrajectories(filteredNades);
 
     // Рендерим список справа
+    // Рендерим список справа
     infoPanelContent.innerHTML = '';
+    
+    // ## Словарь для транслитерации типов в CSS-классы
+    const typeToClass = {
+        'Дым': 'nade-type-smoke',
+        'Флеш': 'nade-type-flash',
+        'Молотов': 'nade-type-molotov',
+        'HE': 'nade-type-he'
+    };
+
     filteredNades.forEach(nade => {
         const item = document.createElement('div');
         item.className = 'nade-list-item';
+        // ## Добавляем класс в зависимости от типа гранаты
+        if (typeToClass[nade.type]) {
+            item.classList.add(typeToClass[nade.type]);
+        }
         item.textContent = generateNadeTitle(nade);
 
         // Подсветка на карте при наведении на элемент списка

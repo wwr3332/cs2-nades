@@ -194,21 +194,51 @@ header {
     overflow-y: auto;
 }
 
-/* Стили для списка гранат */
+/* Общие стили для списка гранат */
 .nade-list-item {
-    background-color: #1b2838;
-    color: #c7d5e0;
+    color: #ffffff;
     padding: 15px;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer;
     margin-bottom: 10px;
     transition: all 0.2s;
     text-align: left;
+    border-left: 4px solid transparent;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 .nade-list-item:hover {
-    border-left: 4px solid #66c0f4;
-    background-color: #203142;
+    filter: brightness(1.2); /* Делаем любой фон ярче при наведении */
+    border-left: 4px solid #ffffff;
+}
+
+/* --- Индивидуальные стили по типам --- */
+
+/* Дым (Smoke) - серый градиент */
+.nade-type-smoke {
+    background: linear-gradient(45deg, #5c6a7a, #3d4852);
+    border-color: #a0aec0;
+}
+
+/* Флеш (Flash) - светлый градиент */
+.nade-type-flash {
+    background: linear-gradient(45deg, #e2e8f0, #cbd5e0);
+    color: #2d3748; /* Темный текст для читаемости */
+    text-shadow: none;
+    border-color: #a0aec0;
+}
+
+/* Молотов (Molotov) - огненный градиент */
+.nade-type-molotov {
+    background: linear-gradient(45deg, #dd6b20, #f56565);
+    border-color: #fed7d7;
+}
+
+/* HE - взрывной градиент */
+.nade-type-he {
+    background: linear-gradient(45deg, #f6e05e, #ed8936);
+    border-color: #fefcbf;
 }
 
 /* Стили для деталей гранаты */
