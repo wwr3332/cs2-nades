@@ -168,10 +168,10 @@ async function renderNadeDetails(nade) {
                 </div>
                 <div class="header-spacer"></div>
                 <div class="header-plate header-plate--zoom-controls">
-                    <input type="range" id="zoom-slider" class="zoom-slider" min="1" max="8" step="0.3" value="4">
+                    <input type="range" id="zoom-slider" class="zoom-slider" min="1" max="8" step="0.3" value="1">
                 </div>
-                <button id="zoom-media-btn" class="header-plate" title="Сбросить зум">
-                    <svg xmlns="http://www.w.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M10.027 4.313a.5.5 0 0 1 .707 0l3 3a.5.5 0 0 1 0 .707l-3 3a.5.5 0 0 1-.707-.707L12.793 7.5l-2.766-2.765a.5.5 0 0 1 0-.707z"/><path d="M4.5 7.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/></svg>
+                <button id="zoom-media-btn" class="header-plate" title="Включить/выключить зум">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M10.027 4.313a.5.5 0 0 1 .707 0l3 3a.5.5 0 0 1 0 .707l-3 3a.5.5 0 0 1-.707-.707L12.793 7.5l-2.766-2.765a.5.5 0 0 1 0-.707z"/><path d="M4.5 7.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/></svg>
                 </button>
             </div>
             ${mediaHTML}
@@ -181,18 +181,42 @@ async function renderNadeDetails(nade) {
 
     const mainMediaView = document.getElementById('main-media-view');
     const zoomSlider = document.getElementById('zoom-slider');
+    const zoomBtn = document.getElementById('zoom-media-btn');
     let currentMediaElement = mainMediaView ? mainMediaView.querySelector('video, img') : null;
 
-    // Функция для обновления зума
-    const applyZoom = () => {
-        if (currentMediaElement && zoomSlider) {
-            currentMediaElement.style.transform = `scale(${zoomSlider.value})`;
+    // --- Логика Зума ---
+    let savedZoomLevel = 4.0; // Запоминаем предпочтительный уровень зума
+
+    const updateTransform = (scale) => {
+        if (currentMediaElement) {
+            currentMediaElement.style.transform = `scale(${scale})`;
         }
     };
 
-    // Применяем зум при изменении слайдера
+    // Слайдер напрямую управляет масштабом и запоминает значение
     if (zoomSlider) {
-        zoomSlider.addEventListener('input', applyZoom);
+        zoomSlider.addEventListener('input', () => {
+            const newZoom = zoomSlider.value;
+            updateTransform(newZoom);
+            // Запоминаем уровень, только если он не 1.0
+            if (parseFloat(newZoom) > 1.0) {
+                savedZoomLevel = newZoom;
+            }
+        });
+    }
+
+    // Кнопка переключает между 1.0 и запомненным уровнем
+    if (zoomBtn && zoomSlider) {
+        zoomBtn.addEventListener('click', () => {
+            const currentZoom = parseFloat(zoomSlider.value);
+            if (currentZoom > 1.0) { // Если зум включен, выключаем
+                zoomSlider.value = 1.0;
+                updateTransform(1.0);
+            } else { // Если зум выключен, включаем
+                zoomSlider.value = savedZoomLevel;
+                updateTransform(savedZoomLevel);
+            }
+        });
     }
     
     // Кнопка "Назад"
@@ -216,9 +240,9 @@ async function renderNadeDetails(nade) {
                 } else if (mediaType === 'image') {
                     mainMediaView.innerHTML = `<img src="${e.currentTarget.dataset.mediaSrc}" alt="Просмотр лайнапа">`;
                 }
-                // После смены медиа, находим новый элемент и применяем к нему текущий зум
                 currentMediaElement = mainMediaView.querySelector('video, img');
-                applyZoom();
+                // Применяем к новому медиа текущее значение зума с ползунка
+                updateTransform(zoomSlider.value);
             });
         });
     }
@@ -237,8 +261,8 @@ async function renderNadeDetails(nade) {
         }
     }
     
-    // Применяем начальный зум
-    applyZoom();
+    // Устанавливаем начальное состояние: зум выключен
+    updateTransform(1.0);
 }
 
     // --- Логика для кнопки зума ---
