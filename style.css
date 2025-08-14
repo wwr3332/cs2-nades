@@ -276,6 +276,41 @@ header {
     flex-shrink: 0; /* Запрещаем шапке сжиматься */
 }
 
+.header-spacer {
+    flex-grow: 1; /* Распорка занимает все свободное место */
+}
+
+.header-plate {
+    display: flex;
+    align-items: center;
+    background-color: #1b2838;
+    padding: 8px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    color: #c7d5e0;
+    border: none;
+}
+
+.header-plate--title h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #66c0f4;
+}
+
+#zoom-media-btn {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#zoom-media-btn:hover {
+    background-color: #3b576e;
+}
+
+#zoom-media-btn svg {
+    display: block;
+    transform: rotate(45deg); /* Поворачиваем иконку для "зума" */
+}
+
 .media-gallery {
     display: flex;
     flex-direction: column;
