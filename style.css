@@ -236,13 +236,13 @@ header {
 
 /* Дым (Smoke) - серый градиент */
 .nade-type-smoke {
-    background: linear-gradient(45deg, #5c6a7a, #3d4852);
+    background: linear-gradient(45deg, #718096, #2d3748);
     border-color: #a0aec0;
 }
 
 /* Флеш (Flash) - светлый градиент */
 .nade-type-flash {
-    background: linear-gradient(45deg, #e2e8f0, #cbd5e0);
+    background: linear-gradient(45deg, #f7fafc, #a0aec0);
     color: #2d3748; /* Темный текст для читаемости */
     text-shadow: none;
     border-color: #a0aec0;
@@ -250,21 +250,75 @@ header {
 
 /* Молотов (Molotov) - огненный градиент */
 .nade-type-molotov {
-    background: linear-gradient(45deg, #dd6b20, #f56565);
+    background: linear-gradient(45deg, #f56565, #c53030);
     border-color: #fed7d7;
 }
 
 /* HE - взрывной градиент */
 .nade-type-he {
-    background: linear-gradient(45deg, #f6e05e, #ed8936);
+    background: linear-gradient(45deg, #faf089, #dd6b20);
     border-color: #fefcbf;
 }
 
 /* Стили для деталей гранаты */
+
 .nade-details-container h3 {
     margin-bottom: 15px;
     color: #66c0f4;
 }
+
+.main-media-view {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #1b2838;
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-media-view video,
+.main-media-view img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.thumbnail-strip {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 45px;
+    border: 2px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    flex-shrink: 0;
+}
+
+.thumbnail:hover {
+    border-color: #4b6a85;
+}
+
+.thumbnail.active {
+    border-color: #66c0f4;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
 .nade-meta-details {
     background-color: #1b2838;
     padding: 10px;
