@@ -314,11 +314,11 @@ header {
     color: #a0aec0;
 }
 .zoom-controls-plate button {
-    background: none;
+    background: #2a475e;
     border: none;
     color: #c7d5e0;
     cursor: pointer;
-    padding: 2px;
+    padding: 5px;
     display: flex;
     align-items: center;
     border-radius: 3px;

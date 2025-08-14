@@ -167,7 +167,7 @@ async function renderNadeDetails(nade) {
                     <span class="meta-item"><strong>Тип броска:</strong> ${nade.throwType}</span>
                 </div>
                 <div class="header-spacer"></div>
-                <div class="header-plate zoom-controls-plate">
+                <div class="header-plate zoom-controls-plate-controls">
                     <span>Зум:</span>
                     <input type="range" id="zoom-slider" class="zoom-slider" min="1" max="8" step="0.3" value="1">
                     <button id="zoom-media-btn" title="Включить/выключить зум">
