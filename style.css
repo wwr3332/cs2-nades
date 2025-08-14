@@ -192,6 +192,9 @@ header {
 #info-panel-content {
     flex-grow: 1;
     overflow-y: auto;
+    display: flex; /* ИЗМЕНЕНО: Включаем flex-контейнер */
+    flex-direction: column; /* Элементы идут в столбик */
+    align-items: flex-start; /* ИЗМЕНЕНО: Выравниваем по левому краю, а не растягиваем */
 }
 
 /* Общие стили для списка гранат */
