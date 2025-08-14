@@ -267,6 +267,13 @@ header {
     color: #66c0f4;
 }
 
+.details-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
 .main-media-view {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -389,11 +396,11 @@ header {
 
 .map-view-active #map-view {
     height: 100vh;
-    padding: 0 20px; /* Этот отступ выравнивает все по кнопке "К картам" */
-    gap: 15px; /* Возвращаем небольшой отступ между панелями */
+    padding: 0; /* Убираем отступы отсюда, так как они теперь на body */
+    gap: 15px; /* Оставляем отступ между панелями */
     box-sizing: border-box;
 }
 
 .map-view-active body {
-    padding: 0; /* Убираем глобальные отступы у body в этом режиме */
+    padding: 0 20px; /* ЗАДАЕМ ОСНОВНЫЕ ОТСТУПЫ СЛЕВА И СПРАВА */
 }
