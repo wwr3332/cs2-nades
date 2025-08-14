@@ -170,11 +170,11 @@ function renderNadeDetails(nade) {
         <div class="nade-details-container">
             <button class="back-to-list-btn">‹ Назад к списку гранат</button>
             <h3>${generateNadeTitle(nade)}</h3>
-            ${mediaHTML}
             <div class="nade-meta-details">
                 <p><strong>Откуда:</strong> ${nade.from}</p>
                 <p><strong>Тип броска:</strong> ${nade.throwType}</p>
             </div>
+            ${mediaHTML}
         </div>`;
     
     // Привязываем событие к кнопке "Назад"
