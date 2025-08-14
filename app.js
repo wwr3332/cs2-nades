@@ -1,4 +1,5 @@
 // --- Глобальные переменные и константы ---
+// --- Глобальные переменные и константы ---
 let currentMapData = null;
 let activeFilters = new Set();
 const colors = { T: '#ffae00', CT: '#00bfff' };
@@ -18,91 +19,115 @@ function generateNadeTitle(nade) {
     return `[${nade.type}] ${nade.to}`;
 }
 
-function drawTrajectory(nade) {
+// Новая функция для отрисовки ВСЕХ траекторий
+function drawAllTrajectories(nades) {
     mapOverlay.innerHTML = '';
-    if (!nade || !nade.trajectory || nade.trajectory.length < 2) return;
+    if (!nades) return;
 
     const { width, height } = mapOverlay.getBoundingClientRect();
-    const color = colors[nade.side] || '#ffffff';
-    const startPoint = nade.trajectory[0];
-    const endPoint = nade.trajectory[nade.trajectory.length - 1];
 
-    const pathData = 'M ' + nade.trajectory.map(p => `${(p.x / 100) * width} ${(p.y / 100) * height}`).join(' L ');
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', pathData);
-    path.setAttribute('stroke', color);
-    path.setAttribute('stroke-width', '2');
-    path.setAttribute('stroke-dasharray', '5 5');
-    path.setAttribute('fill', 'none');
-    mapOverlay.appendChild(path);
+    nades.forEach(nade => {
+        if (!nade.trajectory || nade.trajectory.length < 2) return;
 
-    const startCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    startCircle.setAttribute('cx', `${startPoint.x}%`);
-    startCircle.setAttribute('cy', `${startPoint.y}%`);
-    startCircle.setAttribute('r', '8');
-    startCircle.setAttribute('fill', color);
-    startCircle.setAttribute('stroke', 'white');
-    startCircle.setAttribute('stroke-width', '2');
-    mapOverlay.appendChild(startCircle);
+        const color = colors[nade.side] || '#ffffff';
+        const startPoint = nade.trajectory[0];
+        const endPoint = nade.trajectory[nade.trajectory.length - 1];
 
-    const icon = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-    icon.setAttribute('href', `assets/icons/${nade.type}.svg`);
-    const iconSize = nade.type === 'Флеш' ? 32 : 28;
-    icon.setAttribute('x', `calc(${endPoint.x}% - ${iconSize/2}px)`);
-    icon.setAttribute('y', `calc(${endPoint.y}% - ${iconSize/2}px)`);
-    icon.setAttribute('width', `${iconSize}px`);
-    icon.setAttribute('height', `${iconSize}px`);
-    mapOverlay.appendChild(icon);
+        // Создаем группу для каждого лайнапа
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        group.classList.add('nade-trajectory-group');
+        group.dataset.nadeId = nade.id;
+        group.style.opacity = '0.7'; // Делаем все траектории полупрозрачными по умолчанию
+
+        // 1. Рисуем линию
+        const pathData = 'M ' + nade.trajectory.map(p => `${(p.x / 100) * width} ${(p.y / 100) * height}`).join(' L ');
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', pathData);
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('stroke-dasharray', '5 5');
+        path.setAttribute('fill', 'none');
+        group.appendChild(path);
+
+        // 2. Рисуем точку "откуда"
+        const startCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        startCircle.setAttribute('cx', `${startPoint.x}%`);
+        startCircle.setAttribute('cy', `${startPoint.y}%`);
+        startCircle.setAttribute('r', '8');
+        startCircle.setAttribute('fill', color);
+        startCircle.setAttribute('stroke', 'white');
+        startCircle.setAttribute('stroke-width', '2');
+        group.appendChild(startCircle);
+
+        // 3. Рисуем иконку "куда"
+        const icon = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        icon.setAttribute('href', `assets/icons/${nade.type}.svg`);
+        const iconSize = nade.type === 'Флеш' ? 32 : 28;
+        icon.setAttribute('x', `calc(${endPoint.x}% - ${iconSize/2}px)`);
+        icon.setAttribute('y', `calc(${endPoint.y}% - ${iconSize/2}px)`);
+        icon.setAttribute('width', `${iconSize}px`);
+        icon.setAttribute('height', `${iconSize}px`);
+        group.appendChild(icon);
+
+        // Добавляем обработчик клика на всю группу
+        group.addEventListener('click', () => renderNadeDetails(nade));
+        mapOverlay.appendChild(group);
+    });
 }
 
 function renderNadeList() {
     const nades = currentMapData.nades;
     const filteredNades = activeFilters.size === 0 ? nades : nades.filter(nade => activeFilters.has(nade.type));
+    
+    // Рисуем отфильтрованные траектории на карте
+    drawAllTrajectories(filteredNades);
+
+    // Рендерим список справа
     infoPanelContent.innerHTML = '';
     filteredNades.forEach(nade => {
         const item = document.createElement('div');
         item.className = 'nade-list-item';
         item.textContent = generateNadeTitle(nade);
-        item.addEventListener('mouseenter', () => drawTrajectory(nade));
-        item.addEventListener('mouseleave', () => drawTrajectory(null));
+
+        // Подсветка на карте при наведении на элемент списка
+        item.addEventListener('mouseenter', () => {
+            document.querySelectorAll('.nade-trajectory-group').forEach(g => g.style.opacity = '0.1');
+            const group = document.querySelector(`.nade-trajectory-group[data-nade-id="${nade.id}"]`);
+            if (group) group.style.opacity = '1';
+        });
+        item.addEventListener('mouseleave', () => {
+             document.querySelectorAll('.nade-trajectory-group').forEach(g => g.style.opacity = '0.7');
+        });
+        
         item.addEventListener('click', () => renderNadeDetails(nade));
         infoPanelContent.appendChild(item);
     });
 }
 
-    function renderNadeDetails(nade) {
-        // Проверяем наличие хоть каких-то медиа
-        const hasLineup = nade.lineup && (nade.lineup.video || (nade.lineup.images && nade.lineup.images.length > 0));
+function renderNadeDetails(nade) {
+    let videoHTML = nade.lineup && nade.lineup.video && nade.lineup.video !== ""
+        ? `<video src="${nade.lineup.video}" controls autoplay loop muted></video>` 
+        : '<p>Видео для этой гранаты еще не добавлено.</p>';
 
-        let mediaHTML;
-        if (hasLineup) {
-            const videoHTML = nade.lineup.video ? `<video src="${nade.lineup.video}" controls autoplay loop muted></video>` : '';
-            const imagesHTML = nade.lineup.images && nade.lineup.images.length > 0
-                ? nade.lineup.images.map(src => `<img src="${src}" alt="Скриншот лайнапа">`).join('')
-                : '';
-            mediaHTML = `${videoHTML}<div class="nade-details-images">${imagesHTML}</div>`;
-        } else {
-            mediaHTML = '<p>Медиафайлы для этой гранаты еще не добавлены.</p>';
-        }
-
-        infoPanelContent.innerHTML = `
-            <div class="nade-details-container">
-                <button class="back-to-list-btn">‹ Назад к списку гранат</button>
-                <h3>${generateNadeTitle(nade)}</h3>
-                <div class="nade-meta-details">
-                    <p><strong>Откуда:</strong> ${nade.from}</p>
-                    <p><strong>Тип броска:</strong> ${nade.throwType}</p>
-                </div>
-                ${mediaHTML}
+    infoPanelContent.innerHTML = `
+        <div class="nade-details-container">
+            <button class="back-to-list-btn">‹ Назад к списку гранат</button>
+            <h3>${generateNadeTitle(nade)}</h3>
+            <div class="nade-meta-details">
+                <p><strong>Откуда:</strong> ${nade.from}</p>
+                <p><strong>Тип броска:</strong> ${nade.throwType}</p>
             </div>
-        `;
-        document.querySelector('.back-to-list-btn').addEventListener('click', renderNadeList);
-    }
+            ${videoHTML}
+        </div>
+    `;
+    document.querySelector('.back-to-list-btn').addEventListener('click', () => {
+        renderNadeList();
+    });
+}
 
 // --- ФУНКЦИИ УПРАВЛЕНИЯ ВИДОМ ---
 async function showMapView(mapId) {
     try {
-        // Динамически импортируем файл с данными для выбранной карты
         const module = await import(`./data/${mapId}.js`);
         currentMapData = module.default;
     } catch (error) {
@@ -111,14 +136,13 @@ async function showMapView(mapId) {
         return;
     }
 
-    if (!currentMapData || !currentMapData.nades) {
-        alert(`Данные для карты "${mapId}" загружены, но некорректны.`);
-        return;
-    }
-
     mapTitle.textContent = currentMapData.name;
     mapImage.src = currentMapData.image;
-    mapImage.alt = `Карта ${currentMapData.name}`;
+
+    // Ждем загрузки изображения карты, чтобы получить правильные размеры оверлея
+    mapImage.onload = () => {
+        renderNadeList();
+    };
 
     const filterContainer = document.getElementById('filter-container');
     filterContainer.innerHTML = '';
@@ -136,12 +160,10 @@ async function showMapView(mapId) {
                 activeFilters.add(type);
                 btn.classList.add('active');
             }
-            renderNadeList();
+            renderNadeList(); // Перерисовываем и список, и карту
         });
         filterContainer.appendChild(btn);
     });
-    
-    renderNadeList();
 
     document.body.classList.add('map-view-active');
     header.style.display = 'none';
@@ -156,7 +178,7 @@ function showMapSelection() {
     document.body.style.overflow = 'auto';
     mapView.style.display = 'none';
     mapSelectionView.style.display = 'block';
-    drawTrajectory(null);
+    mapOverlay.innerHTML = ''; // Очищаем SVG
     currentMapData = null;
     activeFilters.clear();
 }
@@ -168,5 +190,5 @@ document.querySelectorAll('.map-card').forEach(card => {
 
 backToSelectionBtn.addEventListener('click', showMapSelection);
 
-showMapSelection(); // Показываем главный экран при старте
-console.log("App ready. Core logic separated from data.");
+showMapSelection();
+console.log("App ready with interactive map display.");
