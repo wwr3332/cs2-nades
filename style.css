@@ -48,21 +48,28 @@ header {
 #map-panel {
     flex: 6; /* 60% ширины */
     display: flex;
-    flex-direction: column; /* Элементы в столбик: сначала список, потом карта */
-    justify-content: flex-end; /* Прижимаем все к низу, чтобы подвал не перекрывал */
+    flex-direction: column;
+    /* Центрируем по горизонтали список и карту */
+    align-items: center;
     box-sizing: border-box;
     padding-bottom: 90px;
+    /* Предотвращаем выход контента за границы панели при малой высоте экрана */
+    overflow: hidden;
 }
 
+
 #nade-list-on-map {
+    flex-grow: 1; /* Занимает все доступное ВЕРТИКАЛЬНОЕ пространство */
+    flex-shrink: 1; /* Позволяем сжиматься, если окно совсем маленькое */
+    overflow-y: auto;  /* Включаем вертикальный скролл */
     display: flex;
-    flex-wrap: wrap; /* Та самая "россыпь" */
-    gap: 8px; /* Расстояние между кнопками */
-    justify-content: center; /* Центрируем кнопки по горизонтали */
-    max-height: 140px; /* Ограничиваем высоту блока, чтобы не занимал много места */
-    overflow-y: auto;  /* Добавляем скролл, если гранат очень много */
-    margin-bottom: 15px; /* Отступ между списком и картой */
-    padding: 5px;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    align-content: flex-start; /* Начинаем заполнять кнопками с самого верха */
+    /* Ширина будет задана через JS, чтобы соответствовать карте */
+    box-sizing: border-box;
 }
 
 /* Стили для контейнера с фильтрами */

@@ -174,7 +174,15 @@ async function showMapView(mapId) {
     mapImage.src = currentMapData.image;
 
     // Ждем загрузки изображения карты, чтобы получить правильные размеры оверлея
+    // Ждем загрузки изображения карты, чтобы получить правильные размеры
     mapImage.onload = () => {
+        // Устанавливаем ширину контейнера списка гранат равной ширине карты.
+        // Это гарантирует, что список не будет вылезать за правый край карты.
+        const mapWidth = mapImage.getBoundingClientRect().width;
+        if (nadeListOnMap) {
+            nadeListOnMap.style.width = `${mapWidth}px`;
+        }
+
         renderNadeList();
     };
 
