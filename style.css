@@ -192,18 +192,20 @@ header {
 #info-panel-content {
     flex-grow: 1;
     overflow-y: auto;
-    display: flex; /* ИЗМЕНЕНО: Включаем flex-контейнер */
-    flex-direction: column; /* Элементы идут в столбик */
-    align-items: flex-start; /* ИЗМЕНЕНО: Выравниваем по левому краю, а не растягиваем */
+    display: flex;
+    flex-direction: row;      /* ИЗМЕНЕНО: Элементы идут в строку */
+    flex-wrap: wrap;          /* ИЗМЕНЕНО: Разрешаем перенос на новую строку */
+    align-content: flex-start;  /* ИЗМЕНЕНО: Новые строки начинаются сверху */
+    gap: 10px;                /* ИЗМЕНЕНО: Задаем расстояние между кнопками */
 }
 
 /* Общие стили для списка гранат */
 .nade-list-item {
     color: #ffffff;
-    padding: 15px;
+    padding: 10px 15px; /* Уменьшили вертикальный паддинг для компактности */
     border-radius: 4px;
     cursor: pointer;
-    margin-bottom: 10px;
+    /* margin-bottom убран, теперь используется gap */
     transition: all 0.2s;
     text-align: left;
     border-left: 4px solid transparent;

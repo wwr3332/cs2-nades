@@ -84,15 +84,23 @@ function renderNadeList() {
 
     // Рендерим список справа
     // Рендерим список справа
+    // Рендерим список справа
     infoPanelContent.innerHTML = '';
     
-    // ## Словарь для транслитерации типов в CSS-классы
     const typeToClass = {
         'Дым': 'nade-type-smoke',
         'Флеш': 'nade-type-flash',
         'Молотов': 'nade-type-molotov',
         'HE': 'nade-type-he'
     };
+    
+    // ## Определяем порядок сортировки
+    const sortOrder = ['Дым', 'Флеш', 'Молотов', 'HE'];
+    
+    // ## Сортируем массив гранат
+    filteredNades.sort((a, b) => {
+        return sortOrder.indexOf(a.type) - sortOrder.indexOf(b.type);
+    });
 
     filteredNades.forEach(nade => {
         const item = document.createElement('div');
