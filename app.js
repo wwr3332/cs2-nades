@@ -140,14 +140,13 @@ async function renderNadeDetails(nade) {
             ? `<video src="${nade.lineup.video}" controls autoplay loop muted></video>`
             : `<img src="${nade.lineup.images[0]}" alt="Просмотр лайнапа">`;
 
-        // Добавляем ID для img тега видео-миниатюры, чтобы его потом найти и заменить src
         const videoThumbnailHTML = hasVideo ? `
-            <div class="thumbnail ${!hasImages ? 'active' : ''}" data-media-type="video">
+            <div class="thumbnail" data-media-type="video">
                 <img id="video-thumb-img" src="assets/icons/video_thumbnail.svg" alt="Видео">
             </div>` : '';
 
         const imageThumbnailsHTML = hasImages ? nade.lineup.images.map((src, i) => `
-            <div class="thumbnail ${!hasVideo && i === 0 ? 'active' : ''}" data-media-type="image" data-media-src="${src}">
+            <div class="thumbnail" data-media-type="image" data-media-src="${src}">
                 <img src="${src}" alt="Скриншот ${i + 1}">
             </div>`).join('') : '';
         
@@ -186,17 +185,33 @@ async function renderNadeDetails(nade) {
             ${mediaHTML}
         </div>`;
     
+    // --- ПРИВЯЗКА СОБЫТИЙ ПОСЛЕ РЕНДЕРА ---
+
+    const mainMediaView = document.getElementById('main-media-view');
+
+    // Кнопка "Назад"
     document.querySelector('.back-to-list-btn').addEventListener('click', () => {
         infoPanelContent.innerHTML = '';
     });
 
+    // Кнопка "Зум"
+    const zoomBtn = document.getElementById('zoom-media-btn');
+    if (zoomBtn && mainMediaView) {
+        zoomBtn.addEventListener('click', () => {
+            mainMediaView.classList.toggle('zoomed');
+        });
+    }
+
+    // Интерактивность галереи
     if (hasVideo || hasImages) {
-        const mainMediaView = document.getElementById('main-media-view');
         const thumbnails = document.querySelectorAll('.thumbnail');
         const videoSrc = nade.lineup.video;
 
         thumbnails.forEach(thumb => {
             thumb.addEventListener('click', (e) => {
+                // При клике на любую миниатюру сбрасываем зум
+                mainMediaView.classList.remove('zoomed');
+                
                 thumbnails.forEach(t => t.classList.remove('active'));
                 e.currentTarget.classList.add('active');
 
@@ -210,20 +225,17 @@ async function renderNadeDetails(nade) {
         });
     }
 
-    // После того как вся структура вставлена в DOM, генерируем и подставляем кадр из видео
-    // После того как вся структура вставлена в DOM, генерируем и подставляем кадр из видео
+    // Генерация кадра из видео
     if (hasVideo) {
         try {
             const videoThumbImg = document.getElementById('video-thumb-img');
             if (videoThumbImg) {
                 const thumbnailUrl = await generateVideoThumbnail(nade.lineup.video);
                 videoThumbImg.src = thumbnailUrl;
-                // Добавляем класс к родительской миниатюре, чтобы показать иконку "Play"
                 videoThumbImg.parentElement.classList.add('video-thumb-loaded');
             }
         } catch (error) {
             console.error("Не удалось сгенерировать миниатюру для видео:", error);
-            // Если произошла ошибка, пользователь просто увидит серую иконку-заглушку
         }
     }
 }
