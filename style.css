@@ -306,15 +306,16 @@ header {
 }
 
 .thumbnail-strip {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Создаем сетку из 5 равных колонок */
     gap: 8px;
     margin-top: 8px;
     margin-bottom: 12px; /* Увеличиваем отступ от низа панели */
 }
 
 .thumbnail {
-    width: 160px; /* Финальное увеличение ширины */
-    height: 90px; /* И высоты (16:9) */
+    width: 100%; /* Занимает всю ширину колонки сетки */
+    aspect-ratio: 16 / 9; /* Автоматически поддерживает высоту в пропорции 16:9 */
     border: 2px solid transparent;
     border-radius: 3px;
     cursor: pointer;
