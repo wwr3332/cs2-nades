@@ -303,14 +303,14 @@ header {
     background-color: #3b576e;
 }
 
-.zoom-controls-plate {
+.zoom-controls-plate-controls {
     gap: 10px;
 }
-.zoom-controls-plate span {
+.zoom-controls-plate-controls span {
     font-weight: bold;
     color: #a0aec0;
 }
-.zoom-controls-plate button {
+.zoom-controls-plate-controls button {
     background: #2a475e;
     border: none;
     color: #c7d5e0;
@@ -321,7 +321,7 @@ header {
     border-radius: 3px;
     transition: background-color 0.2s;
 }
-.zoom-controls-plate button:hover {
+.zoom-controls-plate-controls button:hover {
     background-color: #4b6a85;
 }
 
