@@ -140,15 +140,28 @@ function renderNadeList() {
         item.textContent = generateNadeTitle(nade);
 
         // Подсветка на карте при наведении на элемент списка
+        // Подсветка на карте при наведении на элемент списка
         item.addEventListener('mouseenter', () => {
-            // Не подсвечивать, если элемент уже активен
             if(item.classList.contains('active-nade')) return;
-            document.querySelectorAll('.nade-trajectory-group:not(.active-nade)').forEach(g => g.style.opacity = '0.1');
+
+            // Затемняем все неактивные элементы
+            document.querySelectorAll('.nade-trajectory-group:not(.active-nade)').forEach(g => {
+                g.querySelector('path').style.opacity = '0.1';
+                g.querySelector('circle').style.opacity = '0.1';
+            });
+            // Подсвечиваем текущий
             const group = document.querySelector(`.nade-trajectory-group[data-nade-id="${nade.id}"]`);
-            if (group) group.style.opacity = '1';
+            if (group) {
+                group.querySelector('path').style.opacity = '1';
+                group.querySelector('circle').style.opacity = '1';
+            }
         });
         item.addEventListener('mouseleave', () => {
-            document.querySelectorAll('.nade-trajectory-group:not(.active-nade)').forEach(g => g.style.opacity = '0.7');
+            // Возвращаем всем неактивным элементам их стандартную прозрачность
+            document.querySelectorAll('.nade-trajectory-group:not(.active-nade)').forEach(g => {
+                g.querySelector('path').style.opacity = '0.85';
+                g.querySelector('circle').style.opacity = '0.85';
+            });
         });
 
         item.addEventListener('click', () => renderNadeDetails(nade));
