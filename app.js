@@ -249,6 +249,9 @@ async function renderNadeDetails(nade) {
     
     // Кнопка "Назад"
     document.querySelector('.back-to-list-btn').addEventListener('click', () => {
+        // Снимаем выделение со всех элементов
+        document.querySelectorAll('.active-nade').forEach(el => el.classList.remove('active-nade'));
+        // Очищаем панель
         infoPanelContent.innerHTML = '';
     });
 

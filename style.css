@@ -124,6 +124,7 @@ header {
 
 .nade-trajectory-group.active-nade {
     opacity: 1 !important;
+    animation: slow-blink 2s infinite ease-in-out;
 }
 
 .nade-trajectory-group.active-nade path {
