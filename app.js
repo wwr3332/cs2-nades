@@ -27,9 +27,31 @@ function generateNadeTitle(nade) {
 }
 
 // Новая функция для отрисовки ВСЕХ траекторий
+// Новая функция для отрисовки ВСЕХ траекторий
 function drawAllTrajectories(nades) {
     mapOverlay.innerHTML = '';
     if (!nades) return;
+
+    // --- Определяем SVG-фильтр для тени ---
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+    filter.setAttribute('id', 'icon-shadow');
+    filter.setAttribute('x', '-50%');
+    filter.setAttribute('y', '-50%');
+    filter.setAttribute('width', '200%');
+    filter.setAttribute('height', '200%');
+    
+    const feDropShadow = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow');
+    feDropShadow.setAttribute('dx', '0');
+    feDropShadow.setAttribute('dy', '0');
+    feDropShadow.setAttribute('stdDeviation', '1.5'); // Радиус размытия тени
+    feDropShadow.setAttribute('flood-color', '#000000'); // Цвет тени
+    feDropShadow.setAttribute('flood-opacity', '1'); // Непрозрачность тени
+    
+    filter.appendChild(feDropShadow);
+    defs.appendChild(filter);
+    mapOverlay.appendChild(defs);
+    // --- Конец определения фильтра ---
 
     const { width, height } = mapOverlay.getBoundingClientRect();
 
@@ -40,13 +62,12 @@ function drawAllTrajectories(nades) {
         const startPoint = nade.trajectory[0];
         const endPoint = nade.trajectory[nade.trajectory.length - 1];
 
-        // Создаем группу для каждого лайнапа
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         group.classList.add('nade-trajectory-group');
         group.dataset.nadeId = nade.id;
-        group.style.opacity = '0.7'; // Делаем все траектории полупрозрачными по умолчанию
+        group.style.opacity = '0.85';
+        group.setAttribute('filter', 'url(#icon-shadow)'); // Применяем фильтр ко всей группе
 
-        // 1. Рисуем линию
         const pathData = 'M ' + nade.trajectory.map(p => `${(p.x / 100) * width} ${(p.y / 100) * height}`).join(' L ');
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('d', pathData);
@@ -56,7 +77,6 @@ function drawAllTrajectories(nades) {
         path.setAttribute('fill', 'none');
         group.appendChild(path);
 
-        // 2. Рисуем точку "откуда"
         const startCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         startCircle.setAttribute('cx', `${startPoint.x}%`);
         startCircle.setAttribute('cy', `${startPoint.y}%`);
@@ -66,7 +86,6 @@ function drawAllTrajectories(nades) {
         startCircle.setAttribute('stroke-width', '2');
         group.appendChild(startCircle);
 
-        // 3. Рисуем иконку "куда"
         const icon = document.createElementNS('http://www.w3.org/2000/svg', 'image');
         icon.setAttribute('href', `assets/icons/${nade.type}.svg`);
         const iconSize = nade.type === 'Флеш' ? 32 : 28;
@@ -76,7 +95,6 @@ function drawAllTrajectories(nades) {
         icon.setAttribute('height', `${iconSize}px`);
         group.appendChild(icon);
 
-        // Добавляем обработчик клика на всю группу
         group.addEventListener('click', () => renderNadeDetails(nade));
         mapOverlay.appendChild(group);
     });
