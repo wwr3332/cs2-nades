@@ -111,6 +111,7 @@ function renderNadeList() {
     filteredNades.forEach(nade => {
         const item = document.createElement('div');
         item.className = 'nade-list-item';
+        item.dataset.id = nade.id; // Добавляем ID для легкого поиска
         // ## Добавляем класс в зависимости от типа гранаты
         if (typeToClass[nade.type]) {
             item.classList.add(typeToClass[nade.type]);
@@ -119,12 +120,14 @@ function renderNadeList() {
 
         // Подсветка на карте при наведении на элемент списка
         item.addEventListener('mouseenter', () => {
-            document.querySelectorAll('.nade-trajectory-group').forEach(g => g.style.opacity = '0.1');
+            // Не подсвечивать, если элемент уже активен
+            if(item.classList.contains('active-nade')) return;
+            document.querySelectorAll('.nade-trajectory-group:not(.active-nade)').forEach(g => g.style.opacity = '0.1');
             const group = document.querySelector(`.nade-trajectory-group[data-nade-id="${nade.id}"]`);
             if (group) group.style.opacity = '1';
         });
         item.addEventListener('mouseleave', () => {
-             document.querySelectorAll('.nade-trajectory-group').forEach(g => g.style.opacity = '0.7');
+            document.querySelectorAll('.nade-trajectory-group:not(.active-nade)').forEach(g => g.style.opacity = '0.7');
         });
 
         item.addEventListener('click', () => renderNadeDetails(nade));
@@ -133,6 +136,17 @@ function renderNadeList() {
 }
 
 async function renderNadeDetails(nade) {
+    // --- Логика выделения активной гранаты ---
+    // Снимаем старое выделение
+    document.querySelectorAll('.active-nade').forEach(el => el.classList.remove('active-nade'));
+    
+    // Находим и выделяем новую кнопку в списке и траекторию на карте
+    const listItem = document.querySelector(`.nade-list-item[data-id="${nade.id}"]`);
+    const trajectoryGroup = document.querySelector(`.nade-trajectory-group[data-nade-id="${nade.id}"]`);
+    if (listItem) listItem.classList.add('active-nade');
+    if (trajectoryGroup) trajectoryGroup.classList.add('active-nade');
+
+
     const hasVideo = nade.lineup && nade.lineup.video && nade.lineup.video !== "";
     const hasImages = nade.lineup && nade.lineup.images && nade.lineup.images.length > 0;
 

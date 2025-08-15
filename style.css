@@ -130,6 +130,18 @@ header {
     stroke-width: 3;
 }
 
+@keyframes slow-blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 /* Стили для изображений в детальном просмотре */
 .nade-details-images {
     margin-top: 10px;
