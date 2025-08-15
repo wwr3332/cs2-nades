@@ -393,7 +393,7 @@ header {
     appearance: none;
     width: 120px;
     height: 8px;
-    background: #1b2838;
+    background: #4b6a85; /* Делаем дорожку видимой */
     border-radius: 5px;
     outline: none;
     transition: opacity 0.2s;

@@ -163,49 +163,121 @@ export default {
     }
 },
 {
-    "id": "dust2_test_to_test",
-    "from": "test",
-    "to": "test",
-    "type": "Флеш",
-    "throwType": "Стандартный",
+    "id": "dust2_xbox_to_ct-spawn",
+    "from": "xbox",
+    "to": "ct-spawn",
+    "type": "Дым",
+    "throwType": "Jump-throw",
     "side": "T",
     "trajectory": [
         {
-            "x": 50.29,
-            "y": 87.4
+            "x": 48.44,
+            "y": 41.91
         },
         {
-            "x": 42.15,
-            "y": 22.69
+            "x": 41.93,
+            "y": 30.18
+        },
+        {
+            "x": 51.59,
+            "y": 24
         }
     ],
     "lineup": {
-        "video": "assets/lineups/dust2/test_to_test.mp4",
-        "images": []
+        "video": "assets/lineups/dust2/xbox_to_ct-spawn.mp4",
+        "images": [
+            "assets/lineups/dust2/xbox_to_ct-spawn_1.jpg",
+            "assets/lineups/dust2/xbox_to_ct-spawn_2.jpg",
+            "assets/lineups/dust2/xbox_to_ct-spawn_3.jpg"
+        ]
     }
 },
 {
-    "id": "dust2_test2_to_test2",
-    "from": "test2",
-    "to": "test2",
-    "type": "HE",
+    "id": "dust2_t-spawn_to_b-doors",
+    "from": "t-spawn",
+    "to": "b-doors",
+    "type": "Дым",
+    "throwType": "Jump-throw",
+    "side": "T",
+    "trajectory": [
+        {
+            "x": 23.15,
+            "y": 75.46
+        },
+        {
+            "x": 25.43,
+            "y": 23.34
+        }
+    ],
+    "lineup": {
+        "video": "assets/lineups/dust2/t-spawn_to_b-doors.mp4",
+        "images": [
+            "assets/lineups/dust2/t-spawn_to_b-doors_1.jpg",
+            "assets/lineups/dust2/t-spawn_to_b-doors_2.jpg",
+            "assets/lineups/dust2/t-spawn_to_b-doors_3.jpg"
+        ]
+    }
+},
+{
+    "id": "dust2_t-spawn_to_window",
+    "from": "t-spawn",
+    "to": "window",
+    "type": "Дым",
+    "throwType": "Jump-throw",
+    "side": "T",
+    "trajectory": [
+        {
+            "x": 23.15,
+            "y": 69.92
+        },
+        {
+            "x": 25.21,
+            "y": 12.27
+        }
+    ],
+    "lineup": {
+        "video": "assets/lineups/dust2/t-spawn_to_window.mp4",
+        "images": [
+            "assets/lineups/dust2/t-spawn_to_window_1.jpg",
+            "assets/lineups/dust2/t-spawn_to_window_2.jpg",
+            "assets/lineups/dust2/t-spawn_to_window_3.jpg",
+            "assets/lineups/dust2/t-spawn_to_window_4.jpg"
+        ]
+    }
+},
+{
+    "id": "dust2_upp-tunnels_to_tunnels-entry",
+    "from": "upp-tunnels",
+    "to": "tunnels-entry",
+    "type": "Дым",
     "throwType": "Стандартный",
     "side": "T",
     "trajectory": [
         {
-            "x": 24.01,
-            "y": 88.06
+            "x": 14.13,
+            "y": 43.54
         },
         {
-            "x": 23.25,
-            "y": 46.15
+            "x": 9.25,
+            "y": 35.83
+        },
+        {
+            "x": 13.16,
+            "y": 27.9
         }
     ],
     "lineup": {
-        "video": "assets/lineups/dust2/test2_to_test2.mp4",
-        "images": []
+        "video": "assets/lineups/dust2/upp-tunnels_to_tunnels-entry.mp4",
+        "images": [
+            "assets/lineups/dust2/upp-tunnels_to_tunnels-entry_1.jpg",
+            "assets/lineups/dust2/upp-tunnels_to_tunnels-entry_2.jpg",
+            "assets/lineups/dust2/upp-tunnels_to_tunnels-entry_3.jpg",
+            "assets/lineups/dust2/upp-tunnels_to_tunnels-entry_4.jpg"
+        ]
     }
 },
+
+
 
             
     ]
