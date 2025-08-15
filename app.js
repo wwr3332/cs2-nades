@@ -28,6 +28,7 @@ function generateNadeTitle(nade) {
 
 // Новая функция для отрисовки ВСЕХ траекторий
 // Новая функция для отрисовки ВСЕХ траекторий
+// Новая функция для отрисовки ВСЕХ траекторий
 function drawAllTrajectories(nades) {
     mapOverlay.innerHTML = '';
     if (!nades) return;
@@ -65,8 +66,7 @@ function drawAllTrajectories(nades) {
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         group.classList.add('nade-trajectory-group');
         group.dataset.nadeId = nade.id;
-        group.style.opacity = '0.85';
-        group.setAttribute('filter', 'url(#icon-shadow)'); // Применяем фильтр ко всей группе
+        group.setAttribute('filter', 'url(#icon-shadow)');
 
         const pathData = 'M ' + nade.trajectory.map(p => `${(p.x / 100) * width} ${(p.y / 100) * height}`).join(' L ');
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -75,6 +75,7 @@ function drawAllTrajectories(nades) {
         path.setAttribute('stroke-width', '2');
         path.setAttribute('stroke-dasharray', '5 5');
         path.setAttribute('fill', 'none');
+        path.style.opacity = '0.7'; // Прозрачность только для линии
         group.appendChild(path);
 
         const startCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -84,6 +85,7 @@ function drawAllTrajectories(nades) {
         startCircle.setAttribute('fill', color);
         startCircle.setAttribute('stroke', 'white');
         startCircle.setAttribute('stroke-width', '2');
+        startCircle.style.opacity = '0.7'; // Прозрачность только для начальной точки
         group.appendChild(startCircle);
 
         const icon = document.createElementNS('http://www.w3.org/2000/svg', 'image');
@@ -93,6 +95,7 @@ function drawAllTrajectories(nades) {
         icon.setAttribute('y', `calc(${endPoint.y}% - ${iconSize/2}px)`);
         icon.setAttribute('width', `${iconSize}px`);
         icon.setAttribute('height', `${iconSize}px`);
+        // У иконки прозрачности нет, она будет 100% яркой
         group.appendChild(icon);
 
         group.addEventListener('click', () => renderNadeDetails(nade));
