@@ -122,6 +122,14 @@ header {
     opacity: 1 !important; /* Делаем траекторию полностью непрозрачной при наведении */
 }
 
+.nade-trajectory-group.active-nade {
+    opacity: 1 !important;
+}
+
+.nade-trajectory-group.active-nade path {
+    stroke-width: 3;
+}
+
 /* Стили для изображений в детальном просмотре */
 .nade-details-images {
     margin-top: 10px;
@@ -230,6 +238,11 @@ header {
 .nade-list-item:hover {
     filter: brightness(1.2); /* Делаем любой фон ярче при наведении */
     border-left: 4px solid #ffffff;
+}
+
+.nade-list-item.active-nade {
+    border: 2px solid #66c0f4;
+    box-shadow: 0 0 10px rgba(102, 192, 244, 0.5);
 }
 
 /* --- Индивидуальные стили по типам --- */
