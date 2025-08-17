@@ -210,8 +210,9 @@ header {
 
 #filter-container {
     display: flex;
-    gap: 10px;
-    margin-left: 30px; /* Добавляем отступ от заголовка карты */
+    justify-content: space-between; /* Распределяет элементы равномерно по всей ширине */
+    flex-grow: 1; /* Заставляет контейнер занять все доступное место */
+    margin-left: 30px;
 }
 
 #back-to-selection-btn {
