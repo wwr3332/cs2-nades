@@ -72,13 +72,6 @@ header {
     box-sizing: border-box;
 }
 
-/* Стили для контейнера с фильтрами */
-#filter-container {
-    display: flex;
-    gap: 10px;
-    margin-left: 30px; /* Добавляем отступ от заголовка карты */
-}
-
 .filter-separator {
     width: 2px;
     background-color: #4b6a85;
@@ -213,6 +206,12 @@ header {
     display: flex;
     align-items: center;
     gap: 15px;
+}
+
+#filter-container {
+    display: flex;
+    gap: 10px;
+    margin-left: 30px; /* Добавляем отступ от заголовка карты */
 }
 
 #back-to-selection-btn {
