@@ -604,21 +604,22 @@ header {
 
 /* --- Стилизация полосы прокрутки (Scrollbar) --- */
 ::-webkit-scrollbar {
-    width: 10px; /* Ширина скроллбара */
+    width: 12px; /* Сделаем чуть шире */
 }
 
 ::-webkit-scrollbar-track {
-    background: #1b2838; /* Цвет дорожки */
-    border-radius: 5px;
+    background: #2a475e; /* Цвет дорожки в тон панелям */
+    border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #4b6a85; /* Цвет бегунка */
-    border-radius: 5px;
+    background: #66c0f4; /* Яркий цвет для бегунка */
+    border-radius: 6px;
+    border: 2px solid #2a475e; /* Добавляем рамку в цвет дорожки для объема */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #66c0f4; /* Цвет бегунка при наведении */
+    background: #8ce4ff; /* Более светлый оттенок при наведении */
 }
 
 /* --- Стили для модального окна (лайтбокса) --- */
