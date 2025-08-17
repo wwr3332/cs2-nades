@@ -79,6 +79,24 @@ header {
     margin-left: 30px; /* Добавляем отступ от заголовка карты */
 }
 
+.filter-separator {
+    width: 2px;
+    background-color: #4b6a85;
+    margin: 0 5px;
+}
+
+.filter-btn--t.active {
+    background-color: #ffae00;
+    border-color: #ffae00;
+    color: #1b2838;
+}
+
+.filter-btn--ct.active {
+    background-color: #00bfff;
+    border-color: #00bfff;
+    color: #1b2838;
+}
+
 .filter-btn {
     background-color: #2a475e;
     color: #c7d5e0;

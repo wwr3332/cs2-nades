@@ -616,6 +616,33 @@ export default {
         ]
     }
 },
+{
+    "id": "dust2_ct-spawn_to_box",
+    "from": "ct-spawn",
+    "to": "box",
+    "type": "Дым",
+    "throwType": "Jump-throw",
+    "side": "CT",
+    "trajectory": [
+        {
+            "x": 66.9,
+            "y": 20.74
+        },
+        {
+            "x": 69.29,
+            "y": 54.61
+        }
+    ],
+    "lineup": {
+        "video": "assets/lineups/dust2/ct-spawn_to_box.mp4",
+        "images": [
+            "assets/lineups/dust2/ct-spawn_to_box_1.jpg",
+            "assets/lineups/dust2/ct-spawn_to_box_2.jpg",
+            "assets/lineups/dust2/ct-spawn_to_box_3.jpg"
+        ]
+    }
+},
+
 
 
 
