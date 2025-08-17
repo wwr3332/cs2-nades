@@ -2,6 +2,8 @@
 // --- Глобальные переменные и константы ---
 let currentMapData = null;
 let activeFilters = new Set();
+
+let activeSideFilters = new Set();
 const colors = { T: '#ffae00', CT: '#00bfff' };
 
 // --- Аудио эффекты ---
@@ -110,8 +112,16 @@ function renderNadeList() {
     nadeListOnMap.innerHTML = '';
 
     const nades = currentMapData.nades;
-    const filteredNades = activeFilters.size === 0 ?
-        nades : nades.filter(nade => activeFilters.has(nade.type));
+    
+    // Фильтруем сначала по типу гранаты
+    let filteredNades = activeFilters.size === 0 
+        ? nades 
+        : nades.filter(nade => activeFilters.has(nade.type));
+    
+    // Затем по стороне
+    if (activeSideFilters.size > 0) {
+        filteredNades = filteredNades.filter(nade => activeSideFilters.has(nade.side));
+    }
 
     // Рисуем отфильтрованные траектории на карте
     drawAllTrajectories(filteredNades);
@@ -401,6 +411,9 @@ async function showMapView(mapId) {
     const filterContainer = document.getElementById('filter-container');
     filterContainer.innerHTML = '';
     const nadeTypes = ["Дым", "Флеш", "Молотов", "HE"];
+    const sideTypes = ["T", "CT"];
+
+    // Создаем фильтры по типу гранат
     nadeTypes.forEach(type => {
         const btn = document.createElement('button');
         btn.className = 'filter-btn';
@@ -414,7 +427,31 @@ async function showMapView(mapId) {
                 activeFilters.add(type);
                 btn.classList.add('active');
             }
-            renderNadeList(); // Перерисовываем и список, и карту
+            renderNadeList();
+        });
+        filterContainer.appendChild(btn);
+    });
+
+    // Добавляем разделитель
+    const separator = document.createElement('div');
+    separator.className = 'filter-separator';
+    filterContainer.appendChild(separator);
+
+    // Создаем фильтры по сторонам
+    sideTypes.forEach(side => {
+        const btn = document.createElement('button');
+        btn.className = `filter-btn filter-btn--${side.toLowerCase()}`;
+        btn.textContent = side;
+        btn.dataset.side = side;
+        btn.addEventListener('click', () => {
+            if (activeSideFilters.has(side)) {
+                activeSideFilters.delete(side);
+                btn.classList.remove('active');
+            } else {
+                activeSideFilters.add(side);
+                btn.classList.add('active');
+            }
+            renderNadeList();
         });
         filterContainer.appendChild(btn);
     });
@@ -435,6 +472,7 @@ function showMapSelection() {
     mapOverlay.innerHTML = ''; // Очищаем SVG
     currentMapData = null;
     activeFilters.clear();
+    activeSideFilters.clear();
 }
 
 // --- ИНИЦИАЛИЗАЦИЯ И ГЛАВНЫЕ ОБРАБОТЧИКИ ---
